@@ -15,4 +15,4 @@
 .idea
 
 # Project
-./conf/app.ini
+conf/app.ini
