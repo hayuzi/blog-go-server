@@ -1,6 +1,8 @@
 blog-go-server
 ===
 
+> 学习流程参考: 
+https://github.com/EDDYCJY/go-gin-example/blob/master/README_ZH.md 
 
 
 #### 依赖
