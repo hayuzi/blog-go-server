@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"blog-go-server/pkg/constmap"
 	"github.com/Unknwon/com"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -13,10 +14,12 @@ import (
 
 //获取多个文章标签
 func GetTags(c *gin.Context) {
-	tagName := c.Query("tagName")
+	tagName := c.Query("tag_name")
 
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
+
+	maps["del_status"] = constmap.DEL_STATUS_NORMAL
 
 	if tagName != "" {
 		maps["tag_name"] = tagName

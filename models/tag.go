@@ -1,5 +1,7 @@
 package models
 
+import "blog-go-server/pkg/constmap"
+
 type Tag struct {
 	Model
 	TagName   string `json:"tag_name"`
@@ -17,4 +19,26 @@ func GetTagTotal(maps interface{}) (count int) {
 	db.Model(&Tag{}).Where(maps).Count(&count)
 
 	return
+}
+
+func ExistTagByTagName(tagName string) bool {
+	var tag Tag
+	db.Select("id").
+		Where("tag_name = ?", tagName).
+		Where("del_status = ？", constmap.DEL_STATUS_NORMAL).
+		First(&tag)
+	if tag.ID > 0 {
+		return true
+	}
+
+	return false
+}
+
+func AddTag(tagName string, TagStatus int) bool {
+	db.Create(&Tag{
+		TagName:   tagName,
+		TagStatus: TagStatus,
+	})
+
+	return true
 }
