@@ -2,12 +2,8 @@ package models
 
 type Tag struct {
 	Model
-	Id        int    `json:"id"`
-	TagName   string `json:"name"`
-	TagStatus int    `json:"tagStatus"`
-	DelStatus int
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
+	TagName   string `json:"tag_name"`
+	TagStatus int    `json:"tag_status"`
 }
 
 func GetTags(pageNum int, pageSize int, maps interface{}) (tags []Tag) {
