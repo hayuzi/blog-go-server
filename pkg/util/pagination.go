@@ -27,7 +27,7 @@ func GetPageNum(c *gin.Context) int {
 func GetPageSize(c *gin.Context) int {
 	result := constmap.DefaultPageLimit
 	pageSize, _ := com.StrTo(c.Query("page_limit")).Int()
-	if pageSize > 0 && pageSize <= constmap.DefaultMaxPageLimit {
+	if pageSize > 0 && pageSize <= constmap.MaxPageLimit {
 		result = pageSize
 	}
 	return result
