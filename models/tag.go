@@ -4,6 +4,7 @@ type Tag struct {
 	Model
 	TagName   string `json:"tag_name"`
 	TagStatus int    `json:"tag_status"`
+	delStatus int
 }
 
 func GetTags(pageNum int, pageSize int, maps interface{}) (tags []Tag) {
