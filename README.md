@@ -32,20 +32,29 @@ go get -u github.com/astaxie/beego/validation
 #### 目录结构
 ```
 blog-go-server
-    |-- conf                配置
-    |   |-- app.ini         由于配置不便于暴露, 请复制sample文件并替换配置值
+    |-- conf                    配置
+    |   |-- app.ini             由于配置不便于暴露, 请复制sample文件并替换配置值
     |   |-- app.sample.ini 
     |
-    |-- middleware          中间件
+    |-- middleware              中间件
     |
-    |-- models              数据库模型
-    |   |-- models.go       模型基础
+    |-- models                  数据库模型
+    |   |-- models.go           模型基础
     |  
-    |-- pkg                 项目中的第三方包处理
-    |   |-- e               自定义错误
-    |       |-- code.go     错误码常量
-    |       |-- msg.go      错误信息
-    |-- 
+    |-- pkg                     项目中的第三方包处理
+    |   |-- e                   自定义错误
+    |   |   |-- code.go         错误码常量
+    |   |   |-- msg.go          错误信息
+    |   |   |-- msg.go          错误信息
+    |   |
+    |   |-- setting             配置加载
+    |   |   |-- setting.go
+    |   |   |-- setting.go
+    |   |
+    |   |
+    |   |-- util               工具类
+    |   |   |-- pagination.go     
+    |
     |
     |-- routers             路由
     |   |-- api
