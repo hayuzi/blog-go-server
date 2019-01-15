@@ -1,9 +1,9 @@
 package setting
 
 import (
+	"github.com/go-ini/ini"
 	"log"
 	"time"
-	"github.com/go-ini/ini"
 )
 
 var (
@@ -15,7 +15,6 @@ var (
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 
-	PageSize  int
 	JwtSecret string
 )
 
@@ -55,5 +54,4 @@ func LoadApp() {
 	}
 
 	JwtSecret = sec.Key("JWT_SECRET").MustString("!@)*#)!@U#@*!@!)")
-	PageSize = sec.Key("PAGE_SIZE").MustInt(10)
 }

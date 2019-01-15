@@ -1,8 +1,8 @@
 package models
 
 import (
-	"log"
 	"fmt"
+	"log"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -13,9 +13,9 @@ import (
 var db *gorm.DB
 
 type Model struct {
-	ID        int `gorm:"primary_key" json:"id"`
-	CreatedAt int `json:"created_at"`
-	UpdatedAt int `json:"updated_at"`
+	Id        int `gorm:"primary_key" json:"id"`
+	CreatedAt int `json:"createdAt"`
+	UpdatedAt int `json:"updatedAt"`
 }
 
 func init() {
@@ -35,7 +35,7 @@ func init() {
 	password = sec.Key("DB_PASSWORD").String()
 	host = sec.Key("DB_HOST").String()
 	charset = sec.Key("DB_CHARSET").String()
-	tablePrefix = sec.Key("TABLE_PREFIX").String()
+	tablePrefix = sec.Key("DB_TABLE_PREFIX").String()
 
 	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Local",
 		user,
