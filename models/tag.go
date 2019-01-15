@@ -9,8 +9,8 @@ type Tag struct {
 	delStatus int
 }
 
-func GetTags(pageNum int, pageSize int, maps interface{}) (tags []Tag) {
-	db.Where(maps).Offset(pageNum).Limit(pageSize).Find(&tags)
+func GetTags(offset int, pageSize int, maps interface{}) (tags []Tag) {
+	db.Where(maps).Offset(offset).Limit(pageSize).Find(&tags)
 
 	return
 }
