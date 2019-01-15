@@ -4,8 +4,8 @@ import "blog-go-server/pkg/constmap"
 
 type Tag struct {
 	Model
-	TagName   string `json:"tag_name"`
-	TagStatus int    `json:"tag_status"`
+	TagName   string `json:"tagName"`
+	TagStatus int    `json:"tagStatus"`
 	delStatus int
 }
 
@@ -27,7 +27,7 @@ func ExistTagByTagName(tagName string) bool {
 		Where("tag_name = ?", tagName).
 		Where("del_status = ？", constmap.DelStatusNormal).
 		First(&tag)
-	if tag.ID > 0 {
+	if tag.Id > 0 {
 		return true
 	}
 

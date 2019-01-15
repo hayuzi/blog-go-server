@@ -13,9 +13,9 @@ import (
 var db *gorm.DB
 
 type Model struct {
-	ID        int `gorm:"primary_key" json:"id"`
-	CreatedAt int `json:"created_at"`
-	UpdatedAt int `json:"updated_at"`
+	Id        int `gorm:"primary_key" json:"id"`
+	CreatedAt int `json:"createdAt"`
+	UpdatedAt int `json:"updatedAt"`
 }
 
 func init() {

@@ -14,7 +14,7 @@ import (
 
 //获取多个文章标签
 func GetTags(c *gin.Context) {
-	tagName := c.Query("tag_name")
+	tagName := c.Query("tagName")
 
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
@@ -26,7 +26,7 @@ func GetTags(c *gin.Context) {
 	}
 
 	var tagStatus int = -1
-	if arg := c.Query("tag_status"); arg != "" {
+	if arg := c.Query("tagStatus"); arg != "" {
 		tagStatus = com.StrTo(arg).MustInt()
 		maps["tag_status"] = tagStatus
 	}
@@ -37,8 +37,8 @@ func GetTags(c *gin.Context) {
 	pageSize := util.GetPageSize(c)
 	data["lists"] = models.GetTags(util.GetQueryOffset(pageNum, pageSize), pageSize, maps)
 	data["total"] = models.GetTagTotal(maps)
-	data["page_num"] = pageNum
-	data["page_size"] = pageSize
+	data["pageNum"] = pageNum
+	data["pageSize"] = pageSize
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
@@ -49,13 +49,13 @@ func GetTags(c *gin.Context) {
 
 //新增文章标签
 func AddTag(c *gin.Context) {
-	tagName := c.Query("tag_name")
-	tagStatus := com.StrTo(c.DefaultQuery("tag_status", "0")).MustInt()
+	tagName := c.Query("tagName")
+	tagStatus := com.StrTo(c.DefaultQuery("tagStatus", "0")).MustInt()
 
 	valid := validation.Validation{}
-	valid.Required(tagName, "tag_name").Message("标签名称不能为空")
-	valid.MaxSize(tagName, 60, "tag_name").Message("标签名称最长为60字符")
-	valid.Range(tagStatus, 1, 2, "tag_status").Message("状态只允许1或2")
+	valid.Required(tagName, "tagName").Message("标签名称不能为空")
+	valid.MaxSize(tagName, 60, "tagName").Message("标签名称最长为60字符")
+	valid.Range(tagStatus, 1, 2, "tagStatus").Message("状态只允许1或2")
 
 	code := e.InvalidParams
 	if !valid.HasErrors() {

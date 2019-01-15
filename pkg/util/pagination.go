@@ -17,7 +17,7 @@ func GetQueryOffset(pageNum int, pageSize int) int {
 
 func GetPageNum(c *gin.Context) int {
 	result := constmap.DefaultPageNum
-	pageNum, _ := com.StrTo(c.Query("page_num")).Int()
+	pageNum, _ := com.StrTo(c.Query("pageNum")).Int()
 	if pageNum >= 1 {
 		return pageNum
 	}
@@ -25,9 +25,9 @@ func GetPageNum(c *gin.Context) int {
 }
 
 func GetPageSize(c *gin.Context) int {
-	result := constmap.DefaultPageLimit
-	pageSize, _ := com.StrTo(c.Query("page_limit")).Int()
-	if pageSize > 0 && pageSize <= constmap.MaxPageLimit {
+	result := constmap.DefaultPageSize
+	pageSize, _ := com.StrTo(c.Query("pageSize")).Int()
+	if pageSize > 0 && pageSize <= constmap.MaxPageSize {
 		result = pageSize
 	}
 	return result
