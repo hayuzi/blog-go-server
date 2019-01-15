@@ -4,8 +4,8 @@ type Tag struct {
 	Model
 	Id        int    `json:"id"`
 	TagName   string `json:"name"`
-	TagStatus string `json:"tagStatus"`
-	DelStatus string
+	TagStatus int    `json:"tagStatus"`
+	DelStatus int
 	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
 }

@@ -35,7 +35,7 @@ func init() {
 	password = sec.Key("DB_PASSWORD").String()
 	host = sec.Key("DB_HOST").String()
 	charset = sec.Key("DB_CHARSET").String()
-	tablePrefix = sec.Key("TABLE_PREFIX").String()
+	tablePrefix = sec.Key("DB_TABLE_PREFIX").String()
 
 	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Local",
 		user,
