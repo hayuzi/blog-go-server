@@ -20,7 +20,7 @@ type Model struct {
 
 func init() {
 	var (
-		err                                                        error
+		err                                                        Error
 		dbType, dbName, user, password, host, charset, tablePrefix string
 	)
 

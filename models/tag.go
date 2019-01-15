@@ -25,7 +25,7 @@ func ExistTagByTagName(tagName string) bool {
 	var tag Tag
 	db.Select("id").
 		Where("tag_name = ?", tagName).
-		Where("del_status = ？", constmap.DEL_STATUS_NORMAL).
+		Where("del_status = ？", constmap.DelStatusNormal).
 		First(&tag)
 	if tag.ID > 0 {
 		return true

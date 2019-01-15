@@ -9,7 +9,6 @@ import (
 
 	"blog-go-server/models"
 	"blog-go-server/pkg/e"
-	"blog-go-server/pkg/setting"
 	"blog-go-server/pkg/util"
 )
 
@@ -20,7 +19,7 @@ func GetTags(c *gin.Context) {
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
 
-	maps["del_status"] = constmap.DEL_STATUS_NORMAL
+	maps["del_status"] = constmap.DelStatusNormal
 
 	if tagName != "" {
 		maps["tag_name"] = tagName
@@ -32,7 +31,7 @@ func GetTags(c *gin.Context) {
 		maps["tag_status"] = tagStatus
 	}
 
-	code := e.SUCCESS
+	code := e.Success
 
 	pageNum := util.GetPageNum(c)
 	pageSize := util.GetPageSize(c)
@@ -50,24 +49,21 @@ func GetTags(c *gin.Context) {
 
 //新增文章标签
 func AddTag(c *gin.Context) {
-	name := c.Query("name")
-	state := com.StrTo(c.DefaultQuery("state", "0")).MustInt()
-	createdBy := c.Query("created_by")
+	tagName := c.Query("tag_name")
+	tagStatus := com.StrTo(c.DefaultQuery("tag_status", "0")).MustInt()
 
 	valid := validation.Validation{}
-	valid.Required(name, "name").Message("名称不能为空")
-	valid.MaxSize(name, 100, "name").Message("名称最长为100字符")
-	valid.Required(createdBy, "created_by").Message("创建人不能为空")
-	valid.MaxSize(createdBy, 100, "created_by").Message("创建人最长为100字符")
-	valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
+	valid.Required(tagName, "tag_name").Message("标签名称不能为空")
+	valid.MaxSize(tagName, 60, "tag_name").Message("标签名称最长为60字符")
+	valid.Range(tagStatus, 1, 2, "tag_status").Message("状态只允许1或2")
 
-	code := e.INVALID_PARAMS
+	code := e.invalidParams
 	if !valid.HasErrors() {
-		if !models.ExistTagByTagName(name) {
-			code = e.SUCCESS
-			models.AddTag(name, state, createdBy)
+		if !models.ExistTagByTagName(tagName) {
+			code = e.Success
+			models.AddTag(tagName, tagStatus)
 		} else {
-			code = e.ERROR_EXIST_TAG
+			code = e.ErrorTagExists
 		}
 	}
 
