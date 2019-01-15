@@ -20,7 +20,8 @@ go get -u github.com/Unknwon/com
 go get -u github.com/go-sql-driver/mysql
 go get -u github.com/jinzhu/gorm
 
-# 
+# validation 数据验证器
+go get -u github.com/astaxie/beego/validation
 
 
 
@@ -51,7 +52,7 @@ blog-go-server
     |   |
     |   |-- router.go       路由基础文件
     |
-    |-- 
+    |-- runtime
     |
     |
     |
