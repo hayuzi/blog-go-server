@@ -57,7 +57,7 @@ func AddTag(c *gin.Context) {
 	valid.MaxSize(tagName, 60, "tag_name").Message("标签名称最长为60字符")
 	valid.Range(tagStatus, 1, 2, "tag_status").Message("状态只允许1或2")
 
-	code := e.invalidParams
+	code := e.InvalidParams
 	if !valid.HasErrors() {
 		if !models.ExistTagByTagName(tagName) {
 			code = e.Success
