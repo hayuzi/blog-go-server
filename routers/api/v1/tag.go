@@ -34,11 +34,11 @@ func GetTags(c *gin.Context) {
 	code := e.SUCCESS
 
 	pageNum := util.GetPageNum(c)
-	pageLimit := util.GetPageLimit(c)
-	data["lists"] = models.GetTags(util.GetQueryOffset(pageNum, pageLimit), setting.PageSize, maps)
+	pageSize := util.GetPageSize(c)
+	data["lists"] = models.GetTags(util.GetQueryOffset(pageNum, pageSize), setting.PageSize, maps)
 	data["total"] = models.GetTagTotal(maps)
 	data["page_num"] = pageNum
-	data["page_limit"] = pageLimit
+	data["page_size"] = pageSize
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,

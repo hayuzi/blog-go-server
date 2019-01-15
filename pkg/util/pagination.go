@@ -7,10 +7,10 @@ import (
 )
 
 // 根据页码与每页数量获取sql的查询偏移量
-func GetQueryOffset(pageNum int, pageLimit int) int {
+func GetQueryOffset(pageNum int, pageSize int) int {
 	result := 0
 	if pageNum > 0 {
-		result = (pageNum - 1) * pageLimit
+		result = (pageNum - 1) * pageSize
 	}
 	return result
 }
@@ -24,11 +24,11 @@ func GetPageNum(c *gin.Context) int {
 	return result
 }
 
-func GetPageLimit(c *gin.Context) int {
+func GetPageSize(c *gin.Context) int {
 	result := constmap.DEFAULT_PAGE_LIMIT
-	pageLimit, _ := com.StrTo(c.Query("page_limit")).Int()
-	if pageLimit > 0 && pageLimit <= constmap.MAX_PAGE_LIMIT {
-		result = pageLimit
+	pageSize, _ := com.StrTo(c.Query("page_limit")).Int()
+	if pageSize > 0 && pageSize <= constmap.MAX_PAGE_LIMIT {
+		result = pageSize
 	}
 	return result
 }
