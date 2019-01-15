@@ -23,6 +23,7 @@ go get -u github.com/jinzhu/gorm
 # validation 数据验证器
 go get -u github.com/astaxie/beego/validation
 
+# 
 
 
 ```
