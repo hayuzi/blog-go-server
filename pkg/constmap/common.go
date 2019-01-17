@@ -2,7 +2,7 @@ package constmap
 
 // 伪删除
 const DelStatusNormal = 1  // 未删除
-const delStatusDeleted = 2 // 已经删除
+const DelStatusDeleted = 2 // 已经删除
 
 // 分页相关
 const DefaultPageNum = 1   // 默认页码
