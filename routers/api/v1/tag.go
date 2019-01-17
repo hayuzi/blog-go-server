@@ -76,8 +76,65 @@ func AddTag(c *gin.Context) {
 
 //修改文章标签
 func EditTag(c *gin.Context) {
+	id := com.StrTo(c.Param("id")).MustInt()
+	tagName := c.Query("tagName")
+
+	valid := validation.Validation{}
+
+	var tagStatus int = -1
+	if arg := c.Query("tagStatus"); arg != "" {
+		tagStatus = com.StrTo(arg).MustInt()
+		valid.Range(tagStatus, 1, 2, "tagStatus").Message("状态只允许1或2")
+	}
+
+	valid.Required(id, "id").Message("ID不能为空")
+	valid.MaxSize(tagName, 60, "tagName").Message("标签名称最长为60字符")
+
+	code := e.InvalidParams
+	if !valid.HasErrors() {
+		code = e.Success
+		if models.ExistTagByID(id) {
+			data := make(map[string]interface{})
+			if tagName != "" {
+				data["tag_name"] = tagName
+			}
+			if tagStatus != -1 {
+				data["tag_status"] = tagStatus
+			}
+
+			models.EditTag(id, data)
+		} else {
+			code = e.ErrorTagNotExists
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": make(map[string]string),
+	})
 }
 
 //删除文章标签
 func DeleteTag(c *gin.Context) {
+	id := com.StrTo(c.Param("id")).MustInt()
+
+	valid := validation.Validation{}
+	valid.Min(id, 1, "id").Message("ID必须大于0")
+
+	code := e.InvalidParams
+	if !valid.HasErrors() {
+		code = e.Success
+		if models.ExistTagByID(id) {
+			models.DeleteTag(id)
+		} else {
+			code = e.ErrorTagNotExists
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": make(map[string]string),
+	})
 }
