@@ -16,6 +16,7 @@ type Model struct {
 	Id        int `gorm:"primary_key" json:"id"`
 	CreatedAt int `json:"createdAt"`
 	UpdatedAt int `json:"updatedAt"`
+	DeletedAt int `json:"deletedAt"`
 }
 
 func init() {
