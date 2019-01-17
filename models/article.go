@@ -14,7 +14,6 @@ type Article struct {
 	Title         string `json:"title"`
 	Content       string `json:"content"`
 	ArticleStatus int    `json:"articleStatus" gorm:"default:1"`
-	delStatus     int
 }
 
 func (article *Article) BeforeCreate(scope *gorm.Scope) error {
