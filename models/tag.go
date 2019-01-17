@@ -53,12 +53,13 @@ func ExistTagByID(id int) bool {
 	return false
 }
 
-func AddTag(tagName string, TagStatus int) bool {
-	db.Create(&Tag{
+func AddTag(tagName string, TagStatus int) (*Tag, bool) {
+	tag := Tag{
 		TagName:   tagName,
 		TagStatus: TagStatus,
-	})
-	return true
+	}
+	db.Create(&tag)
+	return &tag, true
 }
 
 func EditTag(id int, data interface{}) bool {
