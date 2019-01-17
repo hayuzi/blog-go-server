@@ -19,6 +19,7 @@ type Article struct {
 
 func (article *Article) BeforeCreate(scope *gorm.Scope) error {
 	scope.SetColumn("created_at", time.Now().Unix())
+	scope.SetColumn("updated_at", time.Now().Unix())
 	return nil
 }
 

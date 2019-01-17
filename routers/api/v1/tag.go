@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"blog-go-server/pkg/constmap"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
@@ -18,8 +17,6 @@ func GetTags(c *gin.Context) {
 
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
-
-	maps["del_status"] = constmap.DelStatusNormal
 
 	if tagName != "" {
 		maps["tag_name"] = tagName
@@ -88,12 +85,12 @@ func AddTag(c *gin.Context) {
 //修改文章标签
 func EditTag(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
-	tagName := c.Query("tagName")
+	tagName := c.PostForm("tagName")
 
 	valid := validation.Validation{}
 
 	var tagStatus int = -1
-	if arg := c.Query("tagStatus"); arg != "" {
+	if arg := c.PostForm("tagStatus"); arg != "" {
 		tagStatus = com.StrTo(arg).MustInt()
 		valid.Range(tagStatus, 1, 2, "tagStatus").Message("状态只允许1或2")
 	}

@@ -13,6 +13,7 @@ type Tag struct {
 
 func (tag *Tag) BeforeCreate(scope *gorm.Scope) error {
 	scope.SetColumn("created_at", time.Now().Unix())
+	scope.SetColumn("updated_at", time.Now().Unix())
 	return nil
 }
 
