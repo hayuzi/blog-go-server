@@ -13,6 +13,18 @@ type Tag struct {
 	delStatus int
 }
 
+func (tag *Tag) BeforeCreate(scope *gorm.Scope) error {
+	scope.SetColumn("created_at", time.Now().Unix())
+
+	return nil
+}
+
+func (tag *Tag) BeforeUpdate(scope *gorm.Scope) error {
+	scope.SetColumn("updated_at", time.Now().Unix())
+
+	return nil
+}
+
 func GetTags(offset int, pageSize int, maps interface{}) (tags []Tag) {
 	db.Where(maps).Offset(offset).Limit(pageSize).Find(&tags)
 
@@ -73,16 +85,4 @@ func EditTag(id int, data interface{}) bool {
 	db.Model(&Tag{}).Where("id = ?", id).Updates(data)
 
 	return true
-}
-
-func (tag *Tag) BeforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("created_at", time.Now().Unix())
-
-	return nil
-}
-
-func (tag *Tag) BeforeUpdate(scope *gorm.Scope) error {
-	scope.SetColumn("updated_at", time.Now().Unix())
-
-	return nil
 }
