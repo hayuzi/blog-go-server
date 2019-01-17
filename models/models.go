@@ -16,7 +16,8 @@ type Model struct {
 	Id        int `gorm:"primary_key" json:"id"`
 	CreatedAt int `json:"createdAt"`
 	UpdatedAt int `json:"updatedAt"`
-	DeletedAt int `json:"deletedAt"`
+	// 软删除字段
+	deletedAt int
 }
 
 func init() {

@@ -9,7 +9,6 @@ type Tag struct {
 	Model
 	TagName   string `json:"tagName"`
 	TagStatus int    `json:"tagStatus" gorm:"default:1"`
-	DeletedAt int
 }
 
 func (tag *Tag) BeforeCreate(scope *gorm.Scope) error {
@@ -69,4 +68,5 @@ func EditTag(id int, data interface{}) bool {
 
 func DeleteTag(id int) bool {
 	db.Where("id = ?", id).Delete(&Tag{})
+	return true
 }
