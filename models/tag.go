@@ -1,26 +1,9 @@
 package models
 
-import (
-	"github.com/jinzhu/gorm"
-	"time"
-)
-
 type Tag struct {
 	Model
 	TagName   string `json:"tagName"`
 	TagStatus int    `json:"tagStatus" gorm:"default:1"`
-}
-
-func (tag *Tag) BeforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("created_at", time.Now().Format("2006-01-02 15:04:05"))
-	scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
-	return nil
-}
-
-func (tag *Tag) BeforeUpdate(scope *gorm.Scope) error {
-	// Gorm 会自动更新
-	// scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
-	return nil
 }
 
 func GetTags(offset int, pageSize int, maps interface{}) (tags []Tag) {

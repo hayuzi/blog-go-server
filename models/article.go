@@ -1,10 +1,5 @@
 package models
 
-import (
-	"github.com/jinzhu/gorm"
-	"time"
-)
-
 type Article struct {
 	Model
 
@@ -14,18 +9,6 @@ type Article struct {
 	Title         string `json:"title"`
 	Content       string `json:"content"`
 	ArticleStatus int    `json:"articleStatus" gorm:"default:1"`
-}
-
-func (article *Article) BeforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("created_at", time.Now().Format("2006-01-02 15:04:05"))
-	scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
-	return nil
-}
-
-func (article *Article) BeforeUpdate(scope *gorm.Scope) error {
-	// Gorm 会自动更新
-	// scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
-	return nil
 }
 
 func ExistArticleByID(id int) bool {

@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -60,4 +61,16 @@ func init() {
 
 func CloseDB() {
 	defer db.Close()
+}
+
+func (model *Model) BeforeCreate(scope *gorm.Scope) error {
+	scope.SetColumn("created_at", time.Now().Format("2006-01-02 15:04:05"))
+	scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
+	return nil
+}
+
+func (model *Model) BeforeUpdate(scope *gorm.Scope) error {
+	// Gorm 会自动更新
+	// scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
+	return nil
 }
