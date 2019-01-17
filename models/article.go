@@ -17,13 +17,14 @@ type Article struct {
 }
 
 func (article *Article) BeforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("created_at", time.Now().Unix())
-	scope.SetColumn("updated_at", time.Now().Unix())
+	scope.SetColumn("created_at", time.Now().Format("2006-01-02 15:04:05"))
+	scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
 	return nil
 }
 
 func (article *Article) BeforeUpdate(scope *gorm.Scope) error {
-	scope.SetColumn("updated_at", time.Now().Unix())
+	// Gorm 会自动更新
+	// scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
 	return nil
 }
 
