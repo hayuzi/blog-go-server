@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
@@ -98,17 +99,23 @@ func EditTag(c *gin.Context) {
 	valid.Required(id, "id").Message("ID不能为空")
 	valid.MaxSize(tagName, 60, "tagName").Message("标签名称最长为60字符")
 
+	fmt.Fprintln(gin.DefaultWriter, tagName)
+	fmt.Fprintln(gin.DefaultWriter, c.Param("id"))
+
 	code := e.InvalidParams
 	if !valid.HasErrors() {
 		code = e.Success
 		if models.ExistTagByID(id) {
 			data := make(map[string]interface{})
 			if tagName != "" {
-				data["tag_name"] = tagName
+				data["tagName"] = tagName
 			}
 			if tagStatus != -1 {
-				data["tag_status"] = tagStatus
+				data["tagStatus"] = tagStatus
 			}
+
+			fmt.Fprintln(gin.DefaultWriter, tagName)
+			fmt.Fprintln(gin.DefaultWriter, c.Param("id"))
 
 			models.EditTag(id, data)
 		} else {

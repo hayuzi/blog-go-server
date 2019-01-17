@@ -13,11 +13,10 @@ import (
 var db *gorm.DB
 
 type Model struct {
-	Id        int `gorm:"primary_key" json:"id"`
-	CreatedAt int `json:"createdAt"`
-	UpdatedAt int `json:"updatedAt"`
-	// 软删除字段
-	deletedAt int
+	Id        int    `gorm:"primary_key" json:"id"`
+	CreatedAt string `json:"createdAt"` // 创建时间
+	UpdatedAt string `json:"updatedAt"` // 更新时间 datetime
+	deletedAt int    // 软删除字段(可以为NULL)  datetime
 }
 
 func init() {
