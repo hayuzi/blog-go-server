@@ -5,8 +5,11 @@ var MsgFlags = map[int]string{
 	Error:         "fail",
 	InvalidParams: "请求参数错误",
 
-	ErrorTagExists:        "已存在该标签名称",
-	ErrorTagNotExists:     "该标签不存在",
+	ErrorTagExists:       "已存在该标签名称",
+	ErrorTagNotExists:    "该标签不存在",
+	ErrorTagCreateFailed: "标签创建失败",
+	ErrorTagUpdateFailed: "标签更新失败",
+
 	ErrorArticleNotExists: "该文章不存在",
 
 	ErrorAuthCheckTokenFail:    "Token鉴权失败",

@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"blog-go-server/pkg/constmap"
+	"fmt"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
@@ -18,8 +18,6 @@ func GetTags(c *gin.Context) {
 
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
-
-	maps["del_status"] = constmap.DelStatusNormal
 
 	if tagName != "" {
 		maps["tag_name"] = tagName
@@ -49,19 +47,30 @@ func GetTags(c *gin.Context) {
 
 //新增文章标签
 func AddTag(c *gin.Context) {
-	tagName := c.Query("tagName")
-	tagStatus := com.StrTo(c.DefaultQuery("tagStatus", "0")).MustInt()
+	tagName := c.PostForm("tagName")
+	tagStatus := com.StrTo(c.DefaultPostForm("tagStatus", "1")).MustInt()
 
 	valid := validation.Validation{}
 	valid.Required(tagName, "tagName").Message("标签名称不能为空")
 	valid.MaxSize(tagName, 60, "tagName").Message("标签名称最长为60字符")
 	valid.Range(tagStatus, 1, 2, "tagStatus").Message("状态只允许1或2")
 
+	// Gin 记录日志
+	// fmt.Fprintln(gin.DefaultWriter, "foo bar")
+
 	code := e.InvalidParams
+	var resData interface{}
+	resData = make(map[string]string)
+
 	if !valid.HasErrors() {
 		if !models.ExistTagByTagName(tagName) {
-			code = e.Success
-			models.AddTag(tagName, tagStatus)
+			tagInfo, ok := models.AddTag(tagName, tagStatus)
+			if ok {
+				code = e.Success
+				resData = *tagInfo
+			} else {
+				code = e.ErrorTagCreateFailed
+			}
 		} else {
 			code = e.ErrorTagExists
 		}
@@ -70,19 +79,19 @@ func AddTag(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  e.GetMsg(code),
-		"data": make(map[string]string),
+		"data": resData,
 	})
 }
 
 //修改文章标签
 func EditTag(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
-	tagName := c.Query("tagName")
+	tagName := c.PostForm("tagName")
 
 	valid := validation.Validation{}
 
 	var tagStatus int = -1
-	if arg := c.Query("tagStatus"); arg != "" {
+	if arg := c.PostForm("tagStatus"); arg != "" {
 		tagStatus = com.StrTo(arg).MustInt()
 		valid.Range(tagStatus, 1, 2, "tagStatus").Message("状态只允许1或2")
 	}
@@ -90,17 +99,23 @@ func EditTag(c *gin.Context) {
 	valid.Required(id, "id").Message("ID不能为空")
 	valid.MaxSize(tagName, 60, "tagName").Message("标签名称最长为60字符")
 
+	fmt.Fprintln(gin.DefaultWriter, tagName)
+	fmt.Fprintln(gin.DefaultWriter, c.Param("id"))
+
 	code := e.InvalidParams
 	if !valid.HasErrors() {
 		code = e.Success
 		if models.ExistTagByID(id) {
 			data := make(map[string]interface{})
 			if tagName != "" {
-				data["tag_name"] = tagName
+				data["tagName"] = tagName
 			}
 			if tagStatus != -1 {
-				data["tag_status"] = tagStatus
+				data["tagStatus"] = tagStatus
 			}
+
+			fmt.Fprintln(gin.DefaultWriter, tagName)
+			fmt.Fprintln(gin.DefaultWriter, c.Param("id"))
 
 			models.EditTag(id, data)
 		} else {
