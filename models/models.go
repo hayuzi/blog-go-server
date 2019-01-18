@@ -17,7 +17,33 @@ type Model struct {
 	Id        int    `gorm:"primary_key" json:"id"`
 	CreatedAt string `json:"createdAt"` // 创建时间 datetime
 	UpdatedAt string `json:"updatedAt"` // 更新时间 datetime
-	deletedAt int    // 软删除字段(可以为NULL)  datetime
+	deletedAt int                       // 软删除字段(可以为NULL)  datetime
+}
+
+func Setup() {
+	var err error
+	db, err = gorm.Open(setting.DatabaseSetting.Type,
+		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Local",
+			setting.DatabaseSetting.User,
+			setting.DatabaseSetting.Password,
+			setting.DatabaseSetting.Host,
+			setting.DatabaseSetting.Name,
+			setting.DatabaseSetting.Charset))
+
+	if err != nil {
+		log.Fatalf("models.Setup err: %v", err)
+	}
+
+	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
+		return setting.DatabaseSetting.TablePrefix + defaultTableName
+	}
+
+	db.SingularTable(true)
+	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
+	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
+	db.Callback().Delete().Replace("gorm:delete", deleteCallback)
+	db.DB().SetMaxIdleConns(10)
+	db.DB().SetMaxOpenConns(100)
 }
 
 func init() {

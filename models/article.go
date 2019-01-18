@@ -46,14 +46,15 @@ func EditArticle(id int, data interface{}) bool {
 	return true
 }
 
-func AddArticle(data map[string]interface{}) bool {
-	db.Create(&Article{
+func AddArticle(data map[string]interface{}) (*Article, bool) {
+	articleInfo := Article{
 		TagID:         data["tag_id"].(int),
 		Title:         data["title"].(string),
 		Content:       data["content"].(string),
 		ArticleStatus: data["article_status"].(int),
-	})
-	return true
+	}
+	db.Create(&articleInfo)
+	return &articleInfo, true
 }
 
 func DeleteArticle(id int) bool {
