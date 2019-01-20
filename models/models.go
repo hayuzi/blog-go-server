@@ -9,15 +9,16 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	"blog-go-server/pkg/setting"
+	"blog-go-server/pkg/util"
 )
 
 var db *gorm.DB
 
 type Model struct {
-	Id        int       `gorm:"primary_key" json:"id"`
-	CreatedAt time.Time `json:"createdAt"` // 创建时间 datetime
-	UpdatedAt time.Time `json:"updatedAt"` // 更新时间 datetime
-	deletedAt *time.Time                   // 软删除字段(可以为NULL)  datetime
+	Id        int            `gorm:"primary_key" json:"id"`
+	CreatedAt util.JSONTime  `json:"createdAt"`     // 创建时间 datetime
+	UpdatedAt util.JSONTime  `json:"updatedAt"`     // 更新时间 datetime
+	DeletedAt *util.JSONTime `sql:"index" json:"-"` // 软删除字段(可以为NULL)  datetime
 }
 
 func Setup() {
