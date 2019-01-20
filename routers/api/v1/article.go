@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
-	"log"
 	"blog-go-server/pkg/logging"
 )
 

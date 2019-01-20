@@ -14,10 +14,10 @@ import (
 var db *gorm.DB
 
 type Model struct {
-	Id        int    `gorm:"primary_key" json:"id"`
-	CreatedAt string `json:"createdAt"` // 创建时间 datetime
-	UpdatedAt string `json:"updatedAt"` // 更新时间 datetime
-	deletedAt int                       // 软删除字段(可以为NULL)  datetime
+	Id        int       `gorm:"primary_key" json:"id"`
+	CreatedAt time.Time `json:"createdAt"` // 创建时间 datetime
+	UpdatedAt time.Time `json:"updatedAt"` // 更新时间 datetime
+	deletedAt *time.Time                   // 软删除字段(可以为NULL)  datetime
 }
 
 func Setup() {
@@ -54,8 +54,10 @@ func CloseDB() {
 }
 
 func (model *Model) BeforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("created_at", time.Now().Format("2006-01-02 15:04:05"))
-	scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
+	// scope.SetColumn("created_at", time.Now().Format("2006-01-02 15:04:05"))
+	scope.SetColumn("created_at", time.Now())
+	// scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
+	scope.SetColumn("updated_at", time.Now())
 	return nil
 }
 
