@@ -132,9 +132,99 @@ func AddArticle(c *gin.Context) {
 //修改文章
 func EditArticle(c *gin.Context) {
 
+	valid := validation.Validation{}
+
+	id := com.StrTo(c.Param("id")).MustInt()
+	tagId := com.StrTo(c.Query("tagId")).MustInt()
+	title := c.Query("title")
+	sketch := c.Query("sketch")
+	content := c.Query("content")
+
+	var weight int = -1
+	if arg := c.Query("weight"); arg != "" {
+		weight = com.StrTo(arg).MustInt()
+		valid.Range(weight, 0, 100, "weight").Message("状态只允许0或100")
+	}
+
+	var articleStatus int = -1
+	if arg := c.Query("articleStatus"); arg != "" {
+		articleStatus = com.StrTo(arg).MustInt()
+		valid.Range(articleStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
+	}
+
+	valid.Min(id, 1, "id").Message("ID必须大于0")
+	valid.MaxSize(title, 100, "title").Message("标题最长为100字符")
+	valid.MaxSize(sketch, 255, "sketch").Message("简述最长为255字符")
+	valid.MaxSize(content, 65535, "content").Message("内容最长为65535字符")
+
+	code := e.InvalidParams
+	if ! valid.HasErrors() {
+		if models.ExistArticleByID(id) {
+			if models.ExistTagByID(tagId) {
+				data := make(map[string]interface {})
+				if tagId > 0 {
+					data["tag_id"] = tagId
+				}
+				if title != "" {
+					data["title"] = title
+				}
+				if sketch != "" {
+					data["sketch"] = sketch
+				}
+				if content != "" {
+					data["content"] = content
+				}
+				if articleStatus != -1 {
+					data["article_status"] = articleStatus
+				}
+
+				models.EditArticle(id, data)
+				code = e.Success
+			} else {
+				code = e.ErrorTagNotExists
+			}
+		} else {
+			code = e.ErrorArticleNotExists
+		}
+	} else {
+		for _, err := range valid.Errors {
+			logging.Info(err.Key, err.Message)
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code" : code,
+		"msg" : e.GetMsg(code),
+		"data" : make(map[string]string),
+	})
 
 }
 
 //删除文章
 func DeleteArticle(c *gin.Context) {
+	id := com.StrTo(c.Param("id")).MustInt()
+
+	valid := validation.Validation{}
+	valid.Min(id, 1, "id").Message("ID必须大于0")
+
+	code := e.InvalidParams
+	if ! valid.HasErrors() {
+		if models.ExistArticleByID(id) {
+			models.DeleteArticle(id)
+			code = e.Success
+		} else {
+			code = e.ErrorArticleNotExists
+		}
+	} else {
+		for _, err := range valid.Errors {
+			logging.Info(err.Key, err.Message)
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code" : code,
+		"msg" : e.GetMsg(code),
+		"data" : make(map[string]string),
+	})
+
 }
