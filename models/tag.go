@@ -3,11 +3,12 @@ package models
 type Tag struct {
 	Model
 	TagName   string `json:"tagName"`
+	Weight    int    `json:"weight" gorm:"default:1"`
 	TagStatus int    `json:"tagStatus" gorm:"default:1"`
 }
 
 func GetTags(offset int, pageSize int, maps interface{}) (tags []Tag) {
-	db.Where(maps).Offset(offset).Limit(pageSize).Find(&tags)
+	db.Where(maps).Order("weight DESC").Order("id DESC").Offset(offset).Limit(pageSize).Find(&tags)
 	return
 }
 
@@ -38,9 +39,10 @@ func ExistTagByID(id int) bool {
 	return false
 }
 
-func AddTag(tagName string, TagStatus int) (*Tag, bool) {
+func AddTag(tagName string, weight int, TagStatus int) (*Tag, bool) {
 	tag := Tag{
 		TagName:   tagName,
+		Weight:    weight,
 		TagStatus: TagStatus,
 	}
 	db.Create(&tag)
