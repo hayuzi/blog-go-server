@@ -9,15 +9,16 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	"blog-go-server/pkg/setting"
+	"blog-go-server/pkg/util"
 )
 
 var db *gorm.DB
 
 type Model struct {
-	Id        int    `gorm:"primary_key" json:"id"`
-	CreatedAt string `json:"createdAt"` // 创建时间 datetime
-	UpdatedAt string `json:"updatedAt"` // 更新时间 datetime
-	deletedAt int                       // 软删除字段(可以为NULL)  datetime
+	Id        int            `gorm:"primary_key" json:"id"`
+	CreatedAt util.JSONTime  `json:"createdAt"`     // 创建时间 datetime
+	UpdatedAt util.JSONTime  `json:"updatedAt"`     // 更新时间 datetime
+	DeletedAt *util.JSONTime `sql:"index" json:"-"` // 软删除字段(可以为NULL)  datetime
 }
 
 func Setup() {
@@ -39,9 +40,12 @@ func Setup() {
 	}
 
 	db.SingularTable(true)
-	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
-	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
-	db.Callback().Delete().Replace("gorm:delete", deleteCallback)
+
+	// 此处注释掉的内容是替换预置回调函数。 只是参考. 目前项目中不会用他
+	// 可参考文档 http://gorm.io/docs/write_plugins.html#Register-a-new-callback
+	// db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
+	// db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
+	// db.Callback().Delete().Replace("gorm:delete", deleteCallback)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 }
@@ -51,8 +55,10 @@ func CloseDB() {
 }
 
 func (model *Model) BeforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("created_at", time.Now().Format("2006-01-02 15:04:05"))
-	scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
+	// scope.SetColumn("created_at", time.Now().Format("2006-01-02 15:04:05"))
+	scope.SetColumn("created_at", time.Now())
+	// scope.SetColumn("updated_at", time.Now().Format("2006-01-02 15:04:05"))
+	scope.SetColumn("updated_at", time.Now())
 	return nil
 }
 
