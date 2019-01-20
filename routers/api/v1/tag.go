@@ -92,14 +92,20 @@ func EditTag(c *gin.Context) {
 
 	valid := validation.Validation{}
 
+	valid.Required(id, "id").Message("ID不能为空")
+	valid.MaxSize(tagName, 60, "tagName").Message("标签名称最长为60字符")
+
 	var tagStatus int = -1
 	if arg := c.PostForm("tagStatus"); arg != "" {
 		tagStatus = com.StrTo(arg).MustInt()
 		valid.Range(tagStatus, 1, 2, "tagStatus").Message("状态只允许1或2")
 	}
 
-	valid.Required(id, "id").Message("ID不能为空")
-	valid.MaxSize(tagName, 60, "tagName").Message("标签名称最长为60字符")
+	var weight int = -1
+	if arg := c.PostForm("weight"); arg != "" {
+		tagStatus = com.StrTo(arg).MustInt()
+		valid.Range(weight, 0, 100, "tagStatus").Message("权重只允许0到100之间")
+	}
 
 	fmt.Fprintln(gin.DefaultWriter, tagName)
 	fmt.Fprintln(gin.DefaultWriter, c.Param("id"))

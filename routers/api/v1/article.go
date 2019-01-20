@@ -8,6 +8,7 @@ import (
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
 	"blog-go-server/pkg/logging"
+	"blog-go-server/pkg/util"
 )
 
 //获取单个文章
@@ -41,10 +42,91 @@ func GetArticle(c *gin.Context) {
 
 //获取多个文章
 func GetArticles(c *gin.Context) {
+	data := make(map[string]interface{})
+	maps := make(map[string]interface{})
+	valid := validation.Validation{}
+
+	var articleStatus int = -1
+	if arg := c.Query("articleStatus"); arg != "" {
+		articleStatus = com.StrTo(arg).MustInt()
+		maps["article_status"] = articleStatus
+		valid.Range(articleStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
+	}
+
+	var tagId int = -1
+	if arg := c.Query("tagId"); arg != "" {
+		tagId = com.StrTo(arg).MustInt()
+		maps["tag_id"] = tagId
+		valid.Min(tagId, 1, "tagId").Message("标签ID必须大于0")
+	}
+
+	code := e.InvalidParams
+	if ! valid.HasErrors() {
+		code = e.Success
+		pageNum := util.GetPageNum(c)
+		pageSize := util.GetPageSize(c)
+		data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps)
+		data["total"] = models.GetArticleTotal(maps)
+		data["pageNum"] = pageNum
+		data["pageSize"] = pageSize
+	} else {
+		for _, err := range valid.Errors {
+			logging.Info(err.Key, err.Message)
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": data,
+	})
+
 }
 
 //新增文章
 func AddArticle(c *gin.Context) {
+	tagId := com.StrTo(c.Query("tagId")).MustInt()
+	title := c.Query("title")
+	sketch := c.Query("sketch")
+	content := c.Query("content")
+	weight := com.StrTo(c.DefaultQuery("weight", "1")).MustInt()
+	articleStatus := com.StrTo(c.DefaultQuery("articleStatus", "1")).MustInt()
+
+	valid := validation.Validation{}
+	valid.Min(tagId, 1, "tagId").Message("标签ID必须大于0")
+	valid.Required(title, "title").Message("标题不能为空")
+	valid.Required(sketch, "sketch").Message("简述不能为空")
+	valid.Required(content, "content").Message("内容不能为空")
+	valid.Range(articleStatus, 0, 100, "weight").Message("权重只允许在0到100之间")
+	valid.Range(articleStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
+
+	code := e.InvalidParams
+	if ! valid.HasErrors() {
+		if models.ExistTagByID(tagId) {
+			data := make(map[string]interface{})
+			data["tag_id"] = tagId
+			data["title"] = title
+			data["sketch"] = sketch
+			data["content"] = content
+			data["weight"] = weight
+			data["articleStatus"] = articleStatus
+
+			models.AddArticle(data)
+			code = e.SUCCESS
+		} else {
+			code = e.ERROR_NOT_EXIST_TAG
+		}
+	} else {
+		for _, err := range valid.Errors {
+			logging.Info(err.Key, err.Message)
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": make(map[string]interface{}),
+	})
 }
 
 //修改文章

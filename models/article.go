@@ -7,7 +7,9 @@ type Article struct {
 	Tag   Tag
 
 	Title         string `json:"title"`
+	Sketch        string `json:"sketch"`
 	Content       string `json:"content"`
+	Weight        int    `json:"weight" gorm:"default:1"`
 	ArticleStatus int    `json:"articleStatus" gorm:"default:1"`
 }
 
