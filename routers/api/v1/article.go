@@ -112,9 +112,9 @@ func AddArticle(c *gin.Context) {
 			data["articleStatus"] = articleStatus
 
 			models.AddArticle(data)
-			code = e.SUCCESS
+			code = e.Success
 		} else {
-			code = e.ERROR_NOT_EXIST_TAG
+			code = e.ErrorArticleNotExists
 		}
 	} else {
 		for _, err := range valid.Errors {
@@ -131,6 +131,8 @@ func AddArticle(c *gin.Context) {
 
 //修改文章
 func EditArticle(c *gin.Context) {
+
+
 }
 
 //删除文章
