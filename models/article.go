@@ -3,11 +3,13 @@ package models
 type Article struct {
 	Model
 
-	TagID int `json:"tagId" gorm:"index"`
+	TagId int `json:"tagId" gorm:"index"`
 	Tag   Tag
 
 	Title         string `json:"title"`
+	Sketch        string `json:"sketch"`
 	Content       string `json:"content"`
+	Weight        int    `json:"weight" gorm:"default:1"`
 	ArticleStatus int    `json:"articleStatus" gorm:"default:1"`
 }
 
@@ -48,7 +50,7 @@ func EditArticle(id int, data interface{}) bool {
 
 func AddArticle(data map[string]interface{}) (*Article, bool) {
 	articleInfo := Article{
-		TagID:         data["tag_id"].(int),
+		TagId:         data["tag_id"].(int),
 		Title:         data["title"].(string),
 		Content:       data["content"].(string),
 		ArticleStatus: data["article_status"].(int),

@@ -49,11 +49,13 @@ func GetTags(c *gin.Context) {
 func AddTag(c *gin.Context) {
 	tagName := c.PostForm("tagName")
 	tagStatus := com.StrTo(c.DefaultPostForm("tagStatus", "1")).MustInt()
+	weight := com.StrTo(c.DefaultPostForm("weight", "0")).MustInt()
 
 	valid := validation.Validation{}
 	valid.Required(tagName, "tagName").Message("标签名称不能为空")
 	valid.MaxSize(tagName, 60, "tagName").Message("标签名称最长为60字符")
 	valid.Range(tagStatus, 1, 2, "tagStatus").Message("状态只允许1或2")
+	valid.Range(weight, 0, 100, "tagStatus").Message("权重只允许0到100之间")
 
 	// Gin 记录日志
 	// fmt.Fprintln(gin.DefaultWriter, "foo bar")
@@ -64,7 +66,7 @@ func AddTag(c *gin.Context) {
 
 	if !valid.HasErrors() {
 		if !models.ExistTagByTagName(tagName) {
-			tagInfo, ok := models.AddTag(tagName, tagStatus)
+			tagInfo, ok := models.AddTag(tagName, weight, tagStatus)
 			if ok {
 				code = e.Success
 				resData = *tagInfo
@@ -90,14 +92,20 @@ func EditTag(c *gin.Context) {
 
 	valid := validation.Validation{}
 
+	valid.Required(id, "id").Message("ID不能为空")
+	valid.MaxSize(tagName, 60, "tagName").Message("标签名称最长为60字符")
+
 	var tagStatus int = -1
 	if arg := c.PostForm("tagStatus"); arg != "" {
 		tagStatus = com.StrTo(arg).MustInt()
 		valid.Range(tagStatus, 1, 2, "tagStatus").Message("状态只允许1或2")
 	}
 
-	valid.Required(id, "id").Message("ID不能为空")
-	valid.MaxSize(tagName, 60, "tagName").Message("标签名称最长为60字符")
+	var weight int = -1
+	if arg := c.PostForm("weight"); arg != "" {
+		tagStatus = com.StrTo(arg).MustInt()
+		valid.Range(weight, 0, 100, "tagStatus").Message("权重只允许0到100之间")
+	}
 
 	fmt.Fprintln(gin.DefaultWriter, tagName)
 	fmt.Fprintln(gin.DefaultWriter, c.Param("id"))

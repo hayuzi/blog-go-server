@@ -23,8 +23,10 @@ go get -u github.com/jinzhu/gorm
 # validation 数据验证器
 go get -u github.com/astaxie/beego/validation
 
-# 
+# jwt 验证包
+go get -u github.com/dgrijalva/jwt-go
 
+# 
 
 ```
 
@@ -33,34 +35,43 @@ go get -u github.com/astaxie/beego/validation
 ```
 blog-go-server
     |-- conf                    配置
-    |   |-- app.ini             由于配置不便于暴露, 请复制sample文件并替换配置值
+    |   |-- app.ini                 由于配置不便于暴露, 请复制sample文件并替换配置值
     |   |-- app.sample.ini 
     |
     |-- middleware              中间件
     |
     |-- models                  数据库模型
-    |   |-- models.go           模型基础
+    |   |-- article.go              文章表model
+    |   |-- models.go               模型基础
+    |   |-- tag.go                  标签表model
     |  
     |-- pkg                     项目中的第三方包处理
+    |   |-- constmap            自定义常量
+    |   |   |-- common.go           通用常量    
+    |   |      
     |   |-- e                   自定义错误
-    |   |   |-- code.go         错误码常量
-    |   |   |-- msg.go          错误信息
-    |   |   |-- msg.go          错误信息
+    |   |   |-- code.go             错误码常量
+    |   |   |-- msg.go              错误信息
     |   |
     |   |-- setting             配置加载
     |   |   |-- setting.go
-    |   |   |-- setting.go
     |   |
     |   |
-    |   |-- util               工具类
-    |   |   |-- pagination.go     
+    |   |-- util                工具类
+    |   |   |-- jsontime.go         Gorm中需要用到的自定义时间格式  
+    |   |   |-- pagination.go       jwt验证类
+    |   |   |-- pagination.go       分页默认参数  
     |
     |
-    |-- routers             路由
+    |-- routers                 路由
     |   |-- api
-    |   |   |-- v1          版本一
+    |   |   |-- v1              版本一
+    |   |   |   |-- article.go      文章控制器        
+    |   |   |   |-- tag.go          标签控制器        
+    |   |   |               
+    |   |   |-- v2              版本二
     |   |
-    |   |-- router.go       路由基础文件
+    |   |-- router.go           路由基础文件
     |
     |-- runtime
     |
