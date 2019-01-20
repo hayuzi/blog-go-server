@@ -39,9 +39,12 @@ func Setup() {
 	}
 
 	db.SingularTable(true)
-	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
-	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
-	db.Callback().Delete().Replace("gorm:delete", deleteCallback)
+
+	// 此处注释掉的内容是替换预置回调函数。 只是参考. 目前项目中不会用他
+	// 可参考文档 http://gorm.io/docs/write_plugins.html#Register-a-new-callback
+	// db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
+	// db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
+	// db.Callback().Delete().Replace("gorm:delete", deleteCallback)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 }
