@@ -13,7 +13,7 @@ import (
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var code int
-		var data interface{}
+		data := make(map[string]interface{})
 
 		code = e.Success
 		token := c.Query("token")

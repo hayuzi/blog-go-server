@@ -1,13 +1,12 @@
-package v1
+package api
 
 import (
-	"log"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/astaxie/beego/validation"
 	"blog-go-server/pkg/e"
 	"blog-go-server/models"
+	"log"
+	"net/http"
 	"blog-go-server/pkg/util"
 )
 

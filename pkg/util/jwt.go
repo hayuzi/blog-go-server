@@ -10,7 +10,7 @@ var jwtSecret = []byte(setting.AppSetting.JwtSecret)
 
 type Claims struct {
 	Username string `json:"username"`
-	Pwd string `json:"pwd"`
+	Password string `json:"password"`
 	jwt.StandardClaims
 }
 
