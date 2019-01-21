@@ -6,7 +6,7 @@ type User struct {
 	Pwd      string `json:"pwd"`
 }
 
-func Login(username, password string) (*User, bool) {
+func CheckAuth(username, password string) (*User, bool) {
 	var user User
 	db.Select("id").Where(User{Username: username, Pwd: password}).First(&user)
 	if user.Id > 0 {
