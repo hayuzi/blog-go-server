@@ -41,6 +41,7 @@ go install
 
 # gin-swaggo
 gopm get -g -v  github.com/swaggo/gin-swagger
+go get -u github.com/alecthomas/template 
 
 # 
 
