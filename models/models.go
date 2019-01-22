@@ -1,15 +1,13 @@
 package models
 
 import (
-	"fmt"
-	"log"
-	"time"
-
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-
 	"blog-go-server/pkg/setting"
 	"blog-go-server/pkg/util"
+	"fmt"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"log"
+	"time"
 )
 
 var db *gorm.DB

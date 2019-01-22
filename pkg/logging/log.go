@@ -1,13 +1,12 @@
 package logging
 
 import (
+	"blog-go-server/pkg/file"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 	"runtime"
-
-	"blog-go-server/pkg/file"
 )
 
 type Level int
