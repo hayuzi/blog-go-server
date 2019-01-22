@@ -31,6 +31,9 @@ go get -u github.com/dgrijalva/jwt-go
 
 # swaggo 文档管理（ 如果没有科学上网下载不了的化，可考虑 gopm ）
 go get -u github.com/swaggo/swag/cmd/swag
+# 若 $GOPATH/bin 没有加入$PATH中，你需要执行将其可执行文件移动到$GOBIN下
+# mv $GOPATH/bin/swag /usr/local/go/bin
+
 # 或者使用gopm下载swaggo
 gopm get -g -v github.com/swaggo/swag/cmd/swag
 cd $GOPATH/src/github.com/swaggo/swag/cmd/swag
