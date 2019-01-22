@@ -5,7 +5,7 @@ blog-go-server
 https://github.com/EDDYCJY/go-gin-example/blob/master/README_ZH.md 
 
 
-#### 依赖
+#### 依赖 在项目目录下下载依赖切换到master分支
 ```
 # gin (http服务框架)
 go get -u github.com/gin-gonic/gin
