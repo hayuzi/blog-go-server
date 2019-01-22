@@ -1,12 +1,13 @@
 package v1
 
 import (
-	"github.com/gin-gonic/gin"
-	"blog-go-server/pkg/e"
-	"blog-go-server/models"
-	"net/http"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
+	"github.com/gin-gonic/gin"
+	"net/http"
+
+	"blog-go-server/models"
+	"blog-go-server/pkg/e"
 	"blog-go-server/pkg/logging"
 	"blog-go-server/pkg/util"
 )
@@ -20,7 +21,7 @@ func GetArticle(c *gin.Context) {
 
 	code := e.InvalidParams
 	var data interface{}
-	if ! valid.HasErrors() {
+	if !valid.HasErrors() {
 		if models.ExistArticleByID(id) {
 			data = models.GetArticle(id)
 			code = e.Success
@@ -61,7 +62,7 @@ func GetArticles(c *gin.Context) {
 	}
 
 	code := e.InvalidParams
-	if ! valid.HasErrors() {
+	if !valid.HasErrors() {
 		code = e.Success
 		pageNum := util.GetPageNum(c)
 		pageSize := util.GetPageSize(c)
@@ -101,7 +102,7 @@ func AddArticle(c *gin.Context) {
 	valid.Range(articleStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
 
 	code := e.InvalidParams
-	if ! valid.HasErrors() {
+	if !valid.HasErrors() {
 		if models.ExistTagByID(tagId) {
 			data := make(map[string]interface{})
 			data["tag_id"] = tagId
@@ -158,10 +159,10 @@ func EditArticle(c *gin.Context) {
 	valid.MaxSize(content, 65535, "content").Message("内容最长为65535字符")
 
 	code := e.InvalidParams
-	if ! valid.HasErrors() {
+	if !valid.HasErrors() {
 		if models.ExistArticleByID(id) {
 			if models.ExistTagByID(tagId) {
-				data := make(map[string]interface {})
+				data := make(map[string]interface{})
 				if tagId > 0 {
 					data["tag_id"] = tagId
 				}
@@ -193,9 +194,9 @@ func EditArticle(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code" : code,
-		"msg" : e.GetMsg(code),
-		"data" : make(map[string]string),
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": make(map[string]string),
 	})
 
 }
@@ -208,7 +209,7 @@ func DeleteArticle(c *gin.Context) {
 	valid.Min(id, 1, "id").Message("ID必须大于0")
 
 	code := e.InvalidParams
-	if ! valid.HasErrors() {
+	if !valid.HasErrors() {
 		if models.ExistArticleByID(id) {
 			models.DeleteArticle(id)
 			code = e.Success
@@ -222,9 +223,9 @@ func DeleteArticle(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code" : code,
-		"msg" : e.GetMsg(code),
-		"data" : make(map[string]string),
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": make(map[string]string),
 	})
 
 }

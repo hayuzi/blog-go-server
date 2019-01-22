@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"blog-go-server/pkg/setting"
 	"blog-go-server/routers"
-	"log"
+
 	"blog-go-server/models"
 )
 

@@ -1,8 +1,8 @@
 package jwt
 
 import (
-	"time"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -30,9 +30,9 @@ func JWT() gin.HandlerFunc {
 
 		if code != e.Success {
 			c.JSON(http.StatusUnauthorized, gin.H{
-				"code" : code,
-				"msg" : e.GetMsg(code),
-				"data" : data,
+				"code": code,
+				"msg":  e.GetMsg(code),
+				"data": data,
 			})
 
 			c.Abort()
