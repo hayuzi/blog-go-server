@@ -1,13 +1,13 @@
 package logging
 
 import (
-	"os"
-	"runtime"
-	"path/filepath"
 	"fmt"
+	"log"
+	"os"
+	"path/filepath"
+	"runtime"
 
 	"blog-go-server/pkg/file"
-	"log"
 )
 
 type Level int
@@ -24,7 +24,7 @@ var (
 )
 
 const (
-	DEBUG   Level = iota
+	DEBUG Level = iota
 	INFO
 	WARNING
 	ERROR

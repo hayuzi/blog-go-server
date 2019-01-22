@@ -1,8 +1,9 @@
 package util
 
 import (
-	"time"
 	"github.com/dgrijalva/jwt-go"
+	"time"
+
 	"blog-go-server/pkg/setting"
 )
 
