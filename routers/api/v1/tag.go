@@ -11,7 +11,12 @@ import (
 	"net/http"
 )
 
-//获取多个文章标签
+// @Summary 获取多个文章标签
+// @Produce  json
+// @Param tagName query string false "tagName"
+// @Param tagStatus query int false "tagStatus"
+// @Success 200 {string} json "{"code":200,"data":{"lists":[{"id": 2, "createdAt": "2019-01-01 01:16:47", "updatedAt": "2019-01-01 01:16:47", "tagName": "PHP", "weight": 5, "tagStatus": 1}], "pageNum": 1, "pageSize": 10,"total":29},"msg":"ok"}"
+// @Router /api/v1/tags [get]
 func GetTags(c *gin.Context) {
 	tagName := c.Query("tagName")
 
@@ -44,7 +49,13 @@ func GetTags(c *gin.Context) {
 	})
 }
 
-//新增文章标签
+// @Summary 新增文章标签
+// @Produce  json
+// @Param tagName query string true "tagName"
+// @Param tagStatus query int false "tagStatus"
+// @Param weight query int false "weight"
+// @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/tags [post]
 func AddTag(c *gin.Context) {
 	tagName := c.PostForm("tagName")
 	tagStatus := com.StrTo(c.DefaultPostForm("tagStatus", "1")).MustInt()
@@ -84,7 +95,14 @@ func AddTag(c *gin.Context) {
 	})
 }
 
-//修改文章标签
+// @Summary 修改文章标签
+// @Produce  json
+// @Param id param int true "ID"
+// @Param tagName query string true "id"
+// @Param tagName query int false "tagName"
+// @Param weight query string true "weight"
+// @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/tags/{id} [put]
 func EditTag(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
 	tagName := c.PostForm("tagName")

@@ -39,6 +39,9 @@ gopm get -g -v github.com/swaggo/swag/cmd/swag
 cd $GOPATH/src/github.com/swaggo/swag/cmd/swag
 go install
 
+# gin-swaggo
+gopm get -g -v  github.com/swaggo/gin-swagger
+
 # 
 
 
