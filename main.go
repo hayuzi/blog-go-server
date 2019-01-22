@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
+	"blog-go-server/models"
+	"blog-go-server/pkg/logging"
 	"blog-go-server/pkg/setting"
 	"blog-go-server/routers"
-
-	"blog-go-server/models"
 )
 
 func main() {
@@ -16,6 +16,7 @@ func main() {
 	// 初始化设置
 	setting.Setup()
 	models.Setup()
+	logging.Setup()
 
 	// 提取基础配置
 	routersInit := routers.InitRouter()
