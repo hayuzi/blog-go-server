@@ -1,14 +1,13 @@
 package v1
 
 import (
+	"blog-go-server/models"
+	"blog-go-server/pkg/e"
+	"blog-go-server/pkg/util"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-
-	"blog-go-server/models"
-	"blog-go-server/pkg/e"
-	"blog-go-server/pkg/util"
 )
 
 type auth struct {
