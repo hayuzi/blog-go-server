@@ -26,7 +26,16 @@ go get -u github.com/astaxie/beego/validation
 # jwt 验证包
 go get -u github.com/dgrijalva/jwt-go
 
-# 
+# 进程管理包（ 服务平滑启动关闭管控， 目前不使用 ）
+# go get -u github.com/fvbock/endless
+
+# swaggo 文档管理（ 如果没有科学上网下载不了的化，可考虑 gopm ）
+go get -u github.com/swaggo/swag/cmd/swag
+# 或者使用gopm下载swaggo
+gopm get -g -v github.com/swaggo/swag/cmd/swag
+cd $GOPATH/src/github.com/swaggo/swag/cmd/swag
+go install
+
 
 ```
 
