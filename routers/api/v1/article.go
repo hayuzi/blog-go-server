@@ -25,12 +25,14 @@ func GetArticle(c *gin.Context) {
 			data = models.GetArticle(id)
 			code = e.Success
 		} else {
+			data = make(map[string]interface{})
 			code = e.ErrorArticleNotExists
 		}
 	} else {
 		for _, err := range valid.Errors {
 			logging.Info(err.Key, err.Message)
 		}
+		data = make(map[string]interface{})
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -195,7 +197,7 @@ func EditArticle(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  e.GetMsg(code),
-		"data": make(map[string]string),
+		"data": make(map[string]interface{}),
 	})
 
 }
@@ -224,7 +226,7 @@ func DeleteArticle(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  e.GetMsg(code),
-		"data": make(map[string]string),
+		"data": make(map[string]interface{}),
 	})
 
 }

@@ -103,7 +103,30 @@ blog-go-server
            
 ```
 
+---
+### 部署
 
-#### 部署
+##### 使用 Dockerfile 容器打包镜像
+```
+# 打包linux环境下的可执行文件
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o blog-go-server .
 
+# 构建docker镜像 
+## hayuzi/blog-go-server-scratch:1.0.0 表示的是 <仓库/名称:版本tag> 
+## hayuzi是本人仓库, 个人构建的时候只需要 <[仓库名/]名称[:版本tag]>
+
+docker build -t hayuzi/blog-go-server-scratch:1.0.0 .
+
+# 运行docker镜像  ( 需要将项目实际配置所在目录挂载进去, 并将日志所在文件夹暴露出来 ) 
+docker run --name=mygoblog -p 8000:8000 -v $GOPATH/src/blog-go-server/conf:/data/blog/conf -v /$GOPATH/src/blog-go-server/runtime:/data/blog/runtime  hayuzi/blog-go-server-scratch:1.0.0
+
+# 停止并删除容器
+docker stop mygoblog && docker rm mygoblog
+
+# 删除镜像
+docker rmi hayuzi/blog-go-server-scratch:1.0.0
+
+
+
+```
 
