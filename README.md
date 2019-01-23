@@ -120,7 +120,12 @@ docker build -t hayuzi/blog-go-server-scratch:1.0.0 .
 # 运行docker镜像  ( 需要将项目实际配置所在目录挂载进去, 并将日志所在文件夹暴露出来 ) 
 docker run --name=mygoblog -p 8000:8000 -v $GOPATH/src/blog-go-server/conf:/data/blog/conf -v /$GOPATH/src/blog-go-server/runtime:/data/blog/runtime  hayuzi/blog-go-server-scratch:1.0.0
 
-# 实际测试可行
+# 停止并删除容器
+docker stop mygoblog && docker rm mygoblog
+
+# 删除镜像
+docker rmi hayuzi/blog-go-server-scratch:1.0.0
+
 
 
 ```
