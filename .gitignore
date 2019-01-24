@@ -16,3 +16,7 @@
 
 # Project
 conf/app.ini
+docs
+runtime
+
+blog-go-server

@@ -5,7 +5,7 @@ blog-go-server
 https://github.com/EDDYCJY/go-gin-example/blob/master/README_ZH.md 
 
 
-#### 依赖
+#### 依赖 在项目目录下下载依赖切换到master分支
 ```
 # gin (http服务框架)
 go get -u github.com/gin-gonic/gin
@@ -26,7 +26,25 @@ go get -u github.com/astaxie/beego/validation
 # jwt 验证包
 go get -u github.com/dgrijalva/jwt-go
 
+# 进程管理包（ 服务平滑启动关闭管控， 目前不使用 ）
+# go get -u github.com/fvbock/endless
+
+# swaggo 文档管理（ 如果没有科学上网下载不了的化，可考虑 gopm ）
+go get -u github.com/swaggo/swag/cmd/swag
+# 若 $GOPATH/bin 没有加入$PATH中，你需要执行将其可执行文件移动到$GOBIN下
+# mv $GOPATH/bin/swag /usr/local/go/bin
+
+# 或者使用gopm下载swaggo
+gopm get -g -v github.com/swaggo/swag/cmd/swag
+cd $GOPATH/src/github.com/swaggo/swag/cmd/swag
+go install
+
+# gin-swaggo
+gopm get -g -v  github.com/swaggo/gin-swagger
+go get -u github.com/alecthomas/template 
+
 # 
+
 
 ```
 
@@ -85,7 +103,30 @@ blog-go-server
            
 ```
 
+---
+### 部署
 
-#### 部署
+##### 使用 Dockerfile 容器打包镜像
+```
+# 打包linux环境下的可执行文件
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o blog-go-server .
 
+# 构建docker镜像 
+## hayuzi/blog-go-server-scratch:1.0.0 表示的是 <仓库/名称:版本tag> 
+## hayuzi是本人仓库, 个人构建的时候只需要 <[仓库名/]名称[:版本tag]>
+
+docker build -t hayuzi/blog-go-server-scratch:1.0.0 .
+
+# 运行docker镜像  ( 需要将项目实际配置所在目录挂载进去, 并将日志所在文件夹暴露出来 ) 
+docker run --name=mygoblog -p 8000:8000 -v $GOPATH/src/blog-go-server/conf:/data/blog/conf -v /$GOPATH/src/blog-go-server/runtime:/data/blog/runtime  hayuzi/blog-go-server-scratch:1.0.0
+
+# 停止并删除容器
+docker stop mygoblog && docker rm mygoblog
+
+# 删除镜像
+docker rmi hayuzi/blog-go-server-scratch:1.0.0
+
+
+
+```
 

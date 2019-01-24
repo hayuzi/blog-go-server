@@ -2,8 +2,8 @@ package logging
 
 import (
 	"blog-go-server/pkg/setting"
-	"time"
 	"fmt"
+	"time"
 )
 
 func getLogFilePath() string {
