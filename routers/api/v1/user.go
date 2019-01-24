@@ -15,7 +15,7 @@ type auth struct {
 	Pwd      string `valid:"Required; MaxSize(50)"`
 }
 
-func GetAuth(c *gin.Context) {
+func GetUser(c *gin.Context) {
 	username := c.Query("username")
 	pwd := c.Query("pwd")
 
@@ -28,7 +28,7 @@ func GetAuth(c *gin.Context) {
 	if ok {
 		_, isExist := models.CheckAuth(username, pwd)
 		if isExist {
-			token, err := util.GenerateToken(username, pwd)
+			token, err := util.GenerateToken(0,username, pwd)
 			if err != nil {
 				code = e.ErrorAuthToken
 			} else {
