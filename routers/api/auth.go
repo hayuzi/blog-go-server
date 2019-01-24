@@ -26,9 +26,9 @@ func GetAuth(c *gin.Context) {
 	data := make(map[string]interface{})
 	code := e.InvalidParams
 	if ok {
-		_, isExist := models.CheckAuth(username, pwd)
+		userInfo, isExist := models.CheckAuth(username, pwd)
 		if isExist {
-			token, err := util.GenerateToken(username, pwd)
+			token, err := util.GenerateToken(userInfo.Id ,username, pwd)
 			if err != nil {
 				code = e.ErrorAuthToken
 			} else {
