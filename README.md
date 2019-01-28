@@ -117,7 +117,7 @@ CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o blog-go-server .
 
 docker build -t hayuzi/blog-go-server-scratch:1.0.0 .
 
-# 运行docker镜像  ( 需要将项目实际配置所在目录挂载进去, 并将日志所在文件夹暴露出来 ) 
+# 运行docker镜像  ( 需要将项目实际配置所在目录挂载进去, 并将日志所在文件夹暴露出来 ) 日志目录挂载好像暂时有问题 
 docker run --name=mygoblog -p 8000:8000 -v $GOPATH/src/blog-go-server/conf:/data/blog/conf -v /$GOPATH/src/blog-go-server/runtime:/data/blog/runtime  hayuzi/blog-go-server-scratch:1.0.0
 
 # 停止并删除容器
