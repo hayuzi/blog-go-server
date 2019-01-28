@@ -43,8 +43,24 @@ go install
 gopm get -g -v  github.com/swaggo/gin-swagger
 go get -u github.com/alecthomas/template 
 
-# 
+# 如果需要定时任务包的话，可以使用下面这个包
+go get -u github.com/robfig/cron
 
+
+
+```
+#### 使用glide进行包管理
+```
+# 下载源码包（目前版本：0.12.3）
+go get github.com/Masterminds/glide
+ 
+# 进入目录
+cd github.com/Masterminds/glide
+ 
+# 编译
+# 注意，如果是离线安装的话，需要执行 go install
+make build
+go build -o glide -ldflags "-X main.version=v0.11.0" glide.go
 
 ```
 
