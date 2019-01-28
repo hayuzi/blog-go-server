@@ -9,7 +9,7 @@ import (
 var jwtSecret = []byte(setting.AppSetting.JwtSecret)
 
 type Claims struct {
-	Id       int `json:"id"`
+	Id       int    `json:"id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 	jwt.StandardClaims
@@ -24,9 +24,9 @@ func GenerateToken(userId int, username, password string) (string, error) {
 		username,
 		password,
 		jwt.StandardClaims{
-		ExpiresAt: expireTime.Unix(),
-		Issuer:    "gin-blog",
-	},
+			ExpiresAt: expireTime.Unix(),
+			Issuer:    "gin-blog",
+		},
 	}
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
