@@ -64,6 +64,15 @@ go build -o glide -ldflags "-X main.version=v0.11.0" glide.go
 
 ```
 
+#### 在go的版本 1.11 以后，加入了  modules 管理
+我们可以使用 go mod 维护依赖
+```
+
+
+
+
+``` 
+
 
 #### 目录结构
 ```
