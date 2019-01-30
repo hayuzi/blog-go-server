@@ -15,8 +15,9 @@
 .idea
 
 # Project
-conf/app.ini
-docs
-runtime
+/conf/app.ini
+/docs
+/runtime
 
 blog-go-server
+/vendor
