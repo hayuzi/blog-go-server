@@ -4,6 +4,11 @@ blog-go-server
 > 学习流程参考: 
 https://github.com/EDDYCJY/go-gin-example/blob/master/README_ZH.md 
 
+#### 在go的版本 1.11 以后，加入了  modules 管理
+我们可以使用 go mod 很方便的维护依赖
+
+该项目中已经使用 go mod vendor 将依赖加载到 vendor
+
 
 #### 依赖 在项目目录下下载依赖切换到master分支
 ```
@@ -49,29 +54,8 @@ go get -u github.com/robfig/cron
 
 
 ```
-#### 使用glide进行包管理
-```
-# 下载源码包（目前版本：0.12.3）
-go get github.com/Masterminds/glide
- 
-# 进入目录
-cd github.com/Masterminds/glide
- 
-# 编译
-# 注意，如果是离线安装的话，需要执行 go install
-make build
-go build -o glide -ldflags "-X main.version=v0.11.0" glide.go
-
-```
-
-#### 在go的版本 1.11 以后，加入了  modules 管理
-我们可以使用 go mod 维护依赖
-```
 
 
-
-
-``` 
 
 
 #### 目录结构
