@@ -7,10 +7,8 @@ https://github.com/EDDYCJY/go-gin-example/blob/master/README_ZH.md
 #### 在go的版本 1.11 以后，加入了  modules 管理
 我们可以使用 go mod 很方便的维护依赖
 
-该项目中已经使用 go mod vendor 将依赖加载到 vendor
 
-
-#### 依赖 在项目目录下下载依赖切换到master分支
+#### 包版本的依赖下载， 在项目目录下下载依赖切换到master分支
 ```
 # gin (http服务框架)
 go get -u github.com/gin-gonic/gin
