@@ -47,6 +47,6 @@ replace google.golang.org/appengine v1.4.0 => github.com/golang/appengine v1.4.0
 
 replace gopkg.in/go-playground/assert.v1 v1.2.1 => github.com/go-playground/assert v1.2.1
 
-replace gopkg.in/go-playground/validator.v8 v8.18.2 => github.com/go-playground/validator v8.18.2
+replace gopkg.in/go-playground/validator.v8 v8.18.2 => github.com/go-playground/validator v8.18.2+incompatible
 
 replace gopkg.in/ini.v1 v1.41.0 => github.com/go-ini/ini v1.41.0
