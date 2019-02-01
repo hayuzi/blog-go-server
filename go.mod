@@ -36,3 +36,17 @@ require (
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
 	gopkg.in/ini.v1 v1.41.0 // indirect
 )
+
+replace golang.org/x/sync v0.0.0 => github.com/golang/sync v0.0.0
+
+replace golang.org/x/sys v0.0.0 => github.com/golang/sys v0.0.0
+
+replace golang.org/x/tools v0.0.0 => github.com/golang/tools v0.0.0
+
+replace google.golang.org/appengine v1.4.0 => github.com/golang/appengine v1.4.0
+
+replace gopkg.in/go-playground/assert.v1 v1.2.1 => github.com/go-playground/assert v1.2.1
+
+replace gopkg.in/go-playground/validator.v8 v8.18.2 => github.com/go-playground/validator v8.18.2
+
+replace gopkg.in/ini.v1 v1.41.0 => github.com/go-ini/ini v1.41.0
