@@ -12,6 +12,11 @@ func GetTags(offset int, pageSize int, maps interface{}) (tags []Tag) {
 	return
 }
 
+func GetAllTags(maps interface{}) (tags []Tag) {
+	db.Where(maps).Order("weight DESC").Order("id DESC").Find(&tags)
+	return
+}
+
 func GetTagTotal(maps interface{}) (count int) {
 	db.Model(&Tag{}).Where(maps).Count(&count)
 	return

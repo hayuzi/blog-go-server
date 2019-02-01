@@ -6,6 +6,7 @@ import (
 	"blog-go-server/pkg/setting"
 	"blog-go-server/routers/api"
 	"blog-go-server/routers/api/v1"
+	adminV1 "blog-go-server/routers/admin/v1"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -26,27 +27,42 @@ func InitRouter() *gin.Engine {
 	r.GET("/auth", api.GetAuth)
 
 	apiV1 := r.Group("/api/v1")
-	apiV1.Use(jwt.JWT())
 	{
 		//获取标签列表
 		apiV1.GET("/tags", v1.GetTags)
-		//新建标签
-		apiV1.POST("/tags", v1.AddTag)
-		//更新指定标签
-		apiV1.PUT("/tags/:id", v1.EditTag)
-		//删除指定标签
-		apiV1.DELETE("/tags/:id", v1.DeleteTag)
+		//获取所有标签
+		apiV1.GET("/tags/all", v1.GetAllTags)
 
 		//获取文章列表
 		apiV1.GET("/articles", v1.GetArticles)
 		//获取指定文章
 		apiV1.GET("/articles/:id", v1.GetArticle)
+	}
+
+	apiAdmin := r.Group("/admin/v1")
+	apiAdmin.Use(jwt.JWT())
+	{
+		//获取标签列表
+		apiV1.GET("/tags", adminV1.GetTags)
+		//新建标签
+		apiV1.POST("/tags", adminV1.AddTag)
+		//获取所有标签
+		apiV1.GET("/tags/all", adminV1.GetAllTags)
+		//更新指定标签
+		apiV1.PUT("/tags/:id", adminV1.EditTag)
+		//删除指定标签
+		apiV1.DELETE("/tags/:id", adminV1.DeleteTag)
+
+		//获取文章列表
+		apiV1.GET("/articles", adminV1.GetArticles)
+		//获取指定文章
+		apiV1.GET("/articles/:id", adminV1.GetArticle)
 		//新建文章
-		apiV1.POST("/articles", v1.AddArticle)
+		apiV1.POST("/articles", adminV1.AddArticle)
 		//更新指定文章
-		apiV1.PUT("/articles/:id", v1.EditArticle)
+		apiV1.PUT("/articles/:id", adminV1.EditArticle)
 		//删除指定文章
-		apiV1.DELETE("/articles/:id", v1.DeleteArticle)
+		apiV1.DELETE("/articles/:id", adminV1.DeleteArticle)
 	}
 
 	return r
