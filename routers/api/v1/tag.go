@@ -52,7 +52,7 @@ func GetTags(c *gin.Context) {
 // @Produce  json
 // @Param tagStatus query int false "tagStatus"
 // @Success 200 {string} json "{"code":200,"data":{"lists":[{"id": 2, "createdAt": "2019-01-01 01:16:47", "updatedAt": "2019-01-01 01:16:47", "tagName": "PHP", "weight": 5, "tagStatus": 1}], "pageNum": 1, "pageSize": 10,"total":29},"msg":"ok"}"
-// @Router /api/v1/tags [get]
+// @Router /admin/v1/tags [get]
 func GetAllTags(c *gin.Context) {
 	adminV1.GetAllTags(c)
 }
