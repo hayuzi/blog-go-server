@@ -17,6 +17,6 @@
 # Project
 /conf/app.ini
 /docs
-/runtime/*
+/runtime/logs
 
 blog-go-server
