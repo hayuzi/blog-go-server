@@ -1,11 +1,12 @@
 package cors
 
 import (
+	"blog-go-server/pkg/e"
 	"github.com/gin-gonic/gin"
 	"fmt"
 	"net/http"
 	"strings"
-	"blog-go-server/pkg/e"
+
 )
 
 func Cors() gin.HandlerFunc {
