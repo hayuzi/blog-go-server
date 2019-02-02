@@ -3,6 +3,7 @@ module github.com/hayuzi/blog-go-server
 require (
 	cloud.google.com/go v0.35.1 // indirect
 	github.com/Unknwon/com v0.0.0-20181010210213-41959bdd855f
+	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc
 	github.com/astaxie/beego v1.11.1
 	github.com/denisenkom/go-mssqldb v0.0.0-20190121005146-b04fd42d9952 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -26,7 +27,7 @@ require (
 	github.com/smartystreets/goconvey v0.0.0-20181108003508-044398e4856c // indirect
 	github.com/stretchr/testify v1.3.0 // indirect
 	github.com/swaggo/gin-swagger v1.0.0
-	github.com/swaggo/swag v1.4.0 // indirect
+	github.com/swaggo/swag v1.4.0
 	github.com/ugorji/go/codec v0.0.0-20190128213124-ee1426cffec0 // indirect
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4 // indirect
 	golang.org/x/sys v0.0.0-20190129075346-302c3dd5f1cc // indirect
