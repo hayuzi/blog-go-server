@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strings"
 	"blog-go-server/pkg/e"
-	"blog-go-server/pkg/constmap"
 )
 
 func Cors() gin.HandlerFunc {
