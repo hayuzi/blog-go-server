@@ -55,6 +55,8 @@ func GetArticles(c *gin.Context) {
 		valid.Range(articleStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
 	}
 
+	q := c.Query("q")
+
 	var tagId int = -1
 	if arg := c.Query("tagId"); arg != "" {
 		tagId = com.StrTo(arg).MustInt()
@@ -67,7 +69,7 @@ func GetArticles(c *gin.Context) {
 		code = e.Success
 		pageNum := util.GetPageNum(c)
 		pageSize := util.GetPageSize(c)
-		data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps)
+		data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, q)
 		data["total"] = models.GetArticleTotal(maps)
 		data["pageNum"] = pageNum
 		data["pageSize"] = pageSize

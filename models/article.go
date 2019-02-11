@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type Article struct {
 	Model
 
@@ -31,8 +33,20 @@ func GetArticleTotal(maps interface{}) (count int) {
 	return
 }
 
-func GetArticles(pageNum int, pageSize int, maps interface{}) (articles []Article) {
-	db.Preload("Tag").Where(maps).Offset(pageNum).Limit(pageSize).Find(&articles)
+func GetArticles(pageNum int, pageSize int, maps interface{}, q string) (articles []Article) {
+	if q != "" {
+		db.Preload("Tag").
+			Where(maps).
+			Where("title LIKE ?", fmt.Sprintf("%%%s%%", q)).
+			Offset(pageNum).
+			Limit(pageSize).Find(&articles)
+	} else {
+		db.Preload("Tag").
+			Where(maps).
+			Offset(pageNum).
+			Limit(pageSize).
+			Find(&articles)
+	}
 	return
 }
 

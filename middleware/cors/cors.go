@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-
 )
 
 func Cors() gin.HandlerFunc {
