@@ -70,7 +70,7 @@ func GetArticles(c *gin.Context) {
 		pageNum := util.GetPageNum(c)
 		pageSize := util.GetPageSize(c)
 		data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, q)
-		data["total"] = models.GetArticleTotal(maps)
+		data["total"] = models.GetArticleTotal(maps, q)
 		data["pageNum"] = pageNum
 		data["pageSize"] = pageSize
 	} else {

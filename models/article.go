@@ -27,9 +27,12 @@ func ExistArticleByID(id int) bool {
 	return false
 }
 
-func GetArticleTotal(maps interface{}) (count int) {
-	db.Model(&Article{}).Where(maps).Count(&count)
-
+func GetArticleTotal(maps interface{}, q string) (count int) {
+	if q != "" {
+		db.Model(&Article{}).Where(maps).Where("title LIKE ?", fmt.Sprintf("%%%s%%", q)).Count(&count)
+	} else {
+		db.Model(&Article{}).Where(maps).Count(&count)
+	}
 	return
 }
 
