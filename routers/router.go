@@ -10,6 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"net/http"
+	"blog-go-server/pkg/upload"
 )
 
 func InitRouter() *gin.Engine {
@@ -20,6 +22,9 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 
 	gin.SetMode(setting.ServerSetting.RunMode)
+
+	// http.FileServer
+	r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
 
 	// swagger
 	r.GET("/swagger/*any", ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "NAME_OF_ENV_VARIABLE"))
