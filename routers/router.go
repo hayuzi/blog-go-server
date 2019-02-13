@@ -33,7 +33,7 @@ func InitRouter() *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.GET("/auth", api.GetAuth)
-	r.GET("/upload", api.UploadImage)
+	r.POST("/upload", api.UploadImage)
 
 	apiV1 := r.Group("/api/v1")
 	{
