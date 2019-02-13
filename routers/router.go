@@ -25,6 +25,7 @@ func InitRouter() *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "NAME_OF_ENV_VARIABLE"))
 
 	r.GET("/auth", api.GetAuth)
+	r.GET("/upload", api.UploadImage)
 
 	apiV1 := r.Group("/api/v1")
 	{
