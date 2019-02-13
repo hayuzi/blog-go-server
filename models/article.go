@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type Article struct {
 	Model
 
@@ -25,14 +27,29 @@ func ExistArticleByID(id int) bool {
 	return false
 }
 
-func GetArticleTotal(maps interface{}) (count int) {
-	db.Model(&Article{}).Where(maps).Count(&count)
-
+func GetArticleTotal(maps interface{}, q string) (count int) {
+	if q != "" {
+		db.Model(&Article{}).Where(maps).Where("title LIKE ?", fmt.Sprintf("%%%s%%", q)).Count(&count)
+	} else {
+		db.Model(&Article{}).Where(maps).Count(&count)
+	}
 	return
 }
 
-func GetArticles(pageNum int, pageSize int, maps interface{}) (articles []Article) {
-	db.Preload("Tag").Where(maps).Offset(pageNum).Limit(pageSize).Find(&articles)
+func GetArticles(pageNum int, pageSize int, maps interface{}, q string) (articles []Article) {
+	if q != "" {
+		db.Preload("Tag").
+			Where(maps).
+			Where("title LIKE ?", fmt.Sprintf("%%%s%%", q)).
+			Offset(pageNum).
+			Limit(pageSize).Find(&articles)
+	} else {
+		db.Preload("Tag").
+			Where(maps).
+			Offset(pageNum).
+			Limit(pageSize).
+			Find(&articles)
+	}
 	return
 }
 

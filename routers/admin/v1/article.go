@@ -48,6 +48,8 @@ func GetArticles(c *gin.Context) {
 	maps := make(map[string]interface{})
 	valid := validation.Validation{}
 
+	q := c.Query("q")
+
 	var articleStatus int = -1
 	if arg := c.Query("articleStatus"); arg != "" {
 		articleStatus = com.StrTo(arg).MustInt()
@@ -67,8 +69,8 @@ func GetArticles(c *gin.Context) {
 		code = e.Success
 		pageNum := util.GetPageNum(c)
 		pageSize := util.GetPageSize(c)
-		data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps)
-		data["total"] = models.GetArticleTotal(maps)
+		data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, q)
+		data["total"] = models.GetArticleTotal(maps, q)
 		data["pageNum"] = pageNum
 		data["pageSize"] = pageSize
 	} else {

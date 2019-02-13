@@ -17,7 +17,7 @@
 # Project
 /conf/app.ini
 /docs
+~/runtime/.gitkeep
 /runtime/*
 
 blog-go-server
-/vendor

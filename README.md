@@ -45,6 +45,7 @@ go install
 # gin-swaggo
 gopm get -g -v  github.com/swaggo/gin-swagger
 go get -u github.com/alecthomas/template 
+# 在项目根目录下运行 swag init
 
 # 如果需要定时任务包的话，可以使用下面这个包
 go get -u github.com/robfig/cron
