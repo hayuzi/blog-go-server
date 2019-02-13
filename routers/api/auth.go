@@ -2,8 +2,8 @@ package api
 
 import (
 	"blog-go-server/models"
+	"blog-go-server/pkg/app"
 	"blog-go-server/pkg/e"
-	"blog-go-server/pkg/logging"
 	"blog-go-server/pkg/util"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
@@ -16,6 +16,8 @@ type auth struct {
 }
 
 func GetAuth(c *gin.Context) {
+	appG := app.Gin{C: c}
+
 	username := c.Query("username")
 	pwd := c.Query("pwd")
 
@@ -25,30 +27,27 @@ func GetAuth(c *gin.Context) {
 
 	data := make(map[string]interface{})
 	code := e.InvalidParams
-	if ok {
-		userInfo, isExist := models.CheckAuth(username, pwd)
-		if isExist {
-			token, err := util.GenerateToken(userInfo.Id ,username, pwd)
-			if err != nil {
-				code = e.ErrorAuthToken
-			} else {
-				data["token"] = token
-				data["id"] = userInfo.Id
-				data["username"] = username
-				code = e.Success
-			}
-		} else {
-			code = e.ErrorAuth
-		}
-	} else {
-		for _, err := range valid.Errors {
-			logging.Info(err.Key, err.Message)
-		}
+
+	if !ok {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, data)
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": data,
-	})
+	userInfo, isExist := models.CheckAuth(username, pwd)
+	if isExist {
+		token, err := util.GenerateToken(userInfo.Id, username, pwd)
+		if err != nil {
+			code = e.ErrorAuthToken
+		} else {
+			data["token"] = token
+			data["id"] = userInfo.Id
+			data["username"] = username
+			code = e.Success
+		}
+	} else {
+		code = e.ErrorAuth
+	}
+
+	appG.Response(http.StatusOK, code, data)
 }
