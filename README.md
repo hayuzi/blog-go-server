@@ -50,7 +50,8 @@ go get -u github.com/alecthomas/template
 # 如果需要定时任务包的话，可以使用下面这个包
 go get -u github.com/robfig/cron
 
-
+# redis 包
+go get -u github.com/gomodule/redigo/redis
 
 ```
 
