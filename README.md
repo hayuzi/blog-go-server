@@ -53,6 +53,13 @@ go get -u github.com/robfig/cron
 # redis 包
 go get -u github.com/gomodule/redigo/redis
 
+
+## 可以使用 github.com/tealeg/xlsx 这个包实现Excel的操作，并直接输出到浏览器
+## 可以参考 https://blog.csdn.net/MrJavaweb/article/details/79760697
+
+## 二维码处理
+go get -u github.com/boombuler/barcode
+
 ```
 
 
