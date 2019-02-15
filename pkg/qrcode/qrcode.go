@@ -92,7 +92,7 @@ func (q *QrCode) Encode(path string) (string, string, error) {
 }
 
 
-func (q *QrCode) EncodeForDirect (c *gin.Context) (string, error) {
+func (q *QrCode) EncodeForGinResponse (c *gin.Context) (string, error) {
 	code, err := qr.Encode(q.Content, q.Level, q.Mode)
 	if err != nil {
 		return "", err

@@ -13,5 +13,5 @@ func QrCode(c *gin.Context) {
 	level := qr.Q
 	mode := qr.Auto
 	code := qrcode.NewQrCode(content, 200, 200, level, mode)
-	code.EncodeForDirect(c)
+	code.EncodeForGinResponse(c)
 }
