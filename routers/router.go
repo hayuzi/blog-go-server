@@ -6,7 +6,7 @@ import (
 	"blog-go-server/middleware/jwt"
 	"blog-go-server/pkg/upload"
 	"blog-go-server/pkg/setting"
-	"blog-go-server/routers/api"
+	"blog-go-server/routers/api/v0"
 	"blog-go-server/routers/api/v1"
 	adminV1 "blog-go-server/routers/admin/v1"
 	"github.com/gin-gonic/gin"
@@ -33,10 +33,14 @@ func InitRouter() *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// 通用接口
-	r.GET("/auth", api.GetAuth)
-	r.GET("/qrcode", api.QrCode)
-	r.POST("/upload", api.UploadImage)
+	apiV0 := r.Group("/api/v0")
+	{
+		apiV0.GET("/auth", v0.GetAuth)
+		apiV0.GET("/qrcode", v0.QrCode)
+		apiV0.POST("/upload", v0.UploadImage)
+	}
 
+	// 业务接口v1
 	apiV1 := r.Group("/api/v1")
 	{
 		//获取标签列表
@@ -50,6 +54,7 @@ func InitRouter() *gin.Engine {
 		apiV1.GET("/articles/:id", v1.GetArticle)
 	}
 
+	// 管理后台接口v1
 	apiAdminV1 := r.Group("/admin/v1")
 	apiAdminV1.Use(jwt.JWT())
 	{

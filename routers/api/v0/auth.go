@@ -1,4 +1,4 @@
-package api
+package v0
 
 import (
 	"blog-go-server/models"
