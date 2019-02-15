@@ -9,37 +9,30 @@ import (
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"blog-go-server/pkg/app"
 )
 
 //获取单个文章
 func GetArticle(c *gin.Context) {
-	id := com.StrTo(c.Param("id")).MustInt()
+	appG := app.Gin{C: c}
 
+	id := com.StrTo(c.Param("id")).MustInt()
 	valid := validation.Validation{}
 	valid.Min(id, 1, "id").Message("ID必须大于0")
 
-	code := e.InvalidParams
-	var data interface{}
-	if !valid.HasErrors() {
-		if models.ExistArticleByID(id) {
-			data = models.GetArticle(id)
-			code = e.Success
-		} else {
-			data = make(map[string]interface{})
-			code = e.ErrorArticleNotExists
-		}
-	} else {
-		for _, err := range valid.Errors {
-			logging.Info(err.Key, err.Message)
-		}
-		data = make(map[string]interface{})
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, nil)
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": data,
-	})
+	if !models.ExistArticleByID(id) {
+		appG.Response(http.StatusOK, e.ErrorArticleNotExists, nil)
+		return
+	}
+
+	data := models.GetArticle(id)
+	appG.Response(http.StatusOK, e.Success, data)
 }
 
 //获取多个文章
