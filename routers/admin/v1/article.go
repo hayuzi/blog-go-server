@@ -194,29 +194,23 @@ func EditArticle(c *gin.Context) {
 
 //删除文章
 func DeleteArticle(c *gin.Context) {
-	id := com.StrTo(c.Param("id")).MustInt()
+	appG := app.Gin{C: c}
 
+	id := com.StrTo(c.Param("id")).MustInt()
 	valid := validation.Validation{}
 	valid.Min(id, 1, "id").Message("ID必须大于0")
 
-	code := e.InvalidParams
-	if !valid.HasErrors() {
-		if models.ExistArticleByID(id) {
-			models.DeleteArticle(id)
-			code = e.Success
-		} else {
-			code = e.ErrorArticleNotExists
-		}
-	} else {
-		for _, err := range valid.Errors {
-			logging.Info(err.Key, err.Message)
-		}
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, nil)
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": make(map[string]interface{}),
-	})
+	if !models.ExistArticleByID(id) {
+		appG.Response(http.StatusOK, e.ErrorArticleNotExists, nil)
+		return
+	}
 
+	models.DeleteArticle(id)
+	appG.Response(http.StatusOK, e.Success, nil)
 }
