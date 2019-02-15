@@ -6,6 +6,8 @@ import (
 	"github.com/boombuler/barcode/qr"
 )
 
+
+// QrCode方法渲染生成二维码并且直接以png格式输出图片到客户端
 func QrCode(c *gin.Context) {
 	content := c.Query("content")
 	level := qr.Q
