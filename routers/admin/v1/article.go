@@ -37,10 +37,11 @@ func GetArticle(c *gin.Context) {
 
 //获取多个文章
 func GetArticles(c *gin.Context) {
+	appG := app.Gin{C: c}
+
 	data := make(map[string]interface{})
 	maps := make(map[string]interface{})
 	valid := validation.Validation{}
-
 	q := c.Query("q")
 
 	var articleStatus int = -1
@@ -57,31 +58,26 @@ func GetArticles(c *gin.Context) {
 		valid.Min(tagId, 1, "tagId").Message("标签ID必须大于0")
 	}
 
-	code := e.InvalidParams
-	if !valid.HasErrors() {
-		code = e.Success
-		pageNum := util.GetPageNum(c)
-		pageSize := util.GetPageSize(c)
-		data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, q)
-		data["total"] = models.GetArticleTotal(maps, q)
-		data["pageNum"] = pageNum
-		data["pageSize"] = pageSize
-	} else {
-		for _, err := range valid.Errors {
-			logging.Info(err.Key, err.Message)
-		}
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, nil)
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": data,
-	})
+	pageNum := util.GetPageNum(c)
+	pageSize := util.GetPageSize(c)
+	data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, q)
+	data["total"] = models.GetArticleTotal(maps, q)
+	data["pageNum"] = pageNum
+	data["pageSize"] = pageSize
 
+	appG.Response(http.StatusOK, e.Success, data)
 }
 
 //新增文章
 func AddArticle(c *gin.Context) {
+	appG := app.Gin{C: c}
+
 	tagId := com.StrTo(c.Query("tagId")).MustInt()
 	title := c.Query("title")
 	sketch := c.Query("sketch")
@@ -97,33 +93,32 @@ func AddArticle(c *gin.Context) {
 	valid.Range(articleStatus, 0, 100, "weight").Message("权重只允许在0到100之间")
 	valid.Range(articleStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
 
-	code := e.InvalidParams
-	if !valid.HasErrors() {
-		if models.ExistTagByID(tagId) {
-			data := make(map[string]interface{})
-			data["tag_id"] = tagId
-			data["title"] = title
-			data["sketch"] = sketch
-			data["content"] = content
-			data["weight"] = weight
-			data["articleStatus"] = articleStatus
-
-			models.AddArticle(data)
-			code = e.Success
-		} else {
-			code = e.ErrorArticleNotExists
-		}
-	} else {
-		for _, err := range valid.Errors {
-			logging.Info(err.Key, err.Message)
-		}
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, nil)
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": make(map[string]interface{}),
-	})
+	if !models.ExistTagByID(tagId) {
+		appG.Response(http.StatusOK, e.ErrorArticleNotExists, nil)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["tag_id"] = tagId
+	data["title"] = title
+	data["sketch"] = sketch
+	data["content"] = content
+	data["weight"] = weight
+	data["articleStatus"] = articleStatus
+	
+	article, ok := models.AddArticle(data)
+	if !ok {
+		appG.Response(http.StatusOK, e.ErrorArticleAddFailed, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.Success, *article)
 }
 
 //修改文章
