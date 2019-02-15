@@ -32,7 +32,9 @@ func InitRouter() *gin.Engine {
 	// swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	// 通用接口
 	r.GET("/auth", api.GetAuth)
+	r.GET("/qrcode", api.QrCode)
 	r.POST("/upload", api.UploadImage)
 
 	apiV1 := r.Group("/api/v1")
