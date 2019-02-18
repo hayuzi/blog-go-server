@@ -27,15 +27,15 @@ func GetTagTotal(maps interface{}) (count int) {
 	return
 }
 
-func ExistTagByTagName(tagName string) (Tag, bool) {
+func ExistTagByTagName(tagName string) (bool) {
 	var tag Tag
 	db.Select("id").
 		Where("tag_name = ?", tagName).
 		First(&tag)
 	if tag.Id > 0 {
-		return tag, true
+		return true
 	}
-	return tag, false
+	return false
 }
 
 func ExistTagByID(id int) (bool) {
@@ -56,7 +56,7 @@ func AddTag(tagName string, weight int, TagStatus int) (*Tag, bool) {
 		TagStatus: TagStatus,
 	}
 	db.Create(&tag)
-	if tag.Id > 0 {
+	if tag.Id == 0 {
 		return &tag, false
 	}
 	return &tag, true
@@ -67,7 +67,6 @@ func EditTag(id int, data interface{}) (bool, error) {
 	if ret.Error != nil {
 		return false, ret.Error
 	}
-	fmt.Println(ret.Error)
 	if ret.RowsAffected == 0 {
 		return false, fmt.Errorf("error %d: edit tag failed", e.ErrorTagUpdateFailed)
 	}
