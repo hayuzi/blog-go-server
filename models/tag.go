@@ -1,5 +1,10 @@
 package models
 
+import (
+	"fmt"
+	"blog-go-server/pkg/e"
+)
+
 type Tag struct {
 	Model
 	TagName   string `json:"tagName"`
@@ -22,18 +27,18 @@ func GetTagTotal(maps interface{}) (count int) {
 	return
 }
 
-func ExistTagByTagName(tagName string) bool {
+func ExistTagByTagName(tagName string) (Tag, bool) {
 	var tag Tag
 	db.Select("id").
 		Where("tag_name = ?", tagName).
 		First(&tag)
 	if tag.Id > 0 {
-		return true
+		return tag, true
 	}
-	return false
+	return tag, false
 }
 
-func ExistTagByID(id int) bool {
+func ExistTagByID(id int) (bool) {
 	var tag Tag
 	db.Select("id").
 		Where("id = ?", id).
@@ -51,13 +56,24 @@ func AddTag(tagName string, weight int, TagStatus int) (*Tag, bool) {
 		TagStatus: TagStatus,
 	}
 	db.Create(&tag)
+	if tag.Id > 0 {
+		return &tag, false
+	}
 	return &tag, true
 }
 
-func EditTag(id int, data interface{}) bool {
-	db.Model(&Tag{}).Where("id = ?", id).Updates(data)
-	return true
+func EditTag(id int, data interface{}) (bool, error) {
+	ret := db.Model(&Tag{}).Where("id = ?", id).Updates(data)
+	if ret.Error != nil {
+		return false, ret.Error
+	}
+	fmt.Println(ret.Error)
+	if ret.RowsAffected == 0 {
+		return false, fmt.Errorf("error %d: edit tag failed", e.ErrorTagUpdateFailed)
+	}
+	return true, nil
 }
+
 
 func DeleteTag(id int) bool {
 	db.Where("id = ?", id).Delete(&Tag{})

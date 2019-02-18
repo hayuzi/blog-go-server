@@ -113,7 +113,7 @@ func AddArticle(c *gin.Context) {
 
 	article, ok := models.AddArticle(data)
 	if !ok {
-		appG.Response(http.StatusOK, e.ErrorArticleAddFailed, nil)
+		appG.Response(http.StatusOK, e.ErrorArticleCreateFailed, nil)
 		return
 	}
 

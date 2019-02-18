@@ -2,13 +2,16 @@ package v1
 
 import (
 	"blog-go-server/models"
-	"blog-go-server/pkg/e"
+	"blog-go-server/pkg/app"
+	"blog-go-server/pkg/logging"
+
 	"blog-go-server/pkg/util"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"blog-go-server/pkg/app"
+
+	"blog-go-server/pkg/e"
 )
 
 // @Summary 获取多个文章标签
@@ -143,21 +146,24 @@ func EditTag(c *gin.Context) {
 		return
 	}
 
-	if models.ExistTagByID(id) {
+	if !models.ExistTagByID(id) {
 		appG.Response(http.StatusOK, e.ErrorTagNotExists, nil)
+		return
 	}
 
 	data := make(map[string]interface{})
-	if tagName != "" {
-		data["tagName"] = tagName
-	}
 	if tagStatus != -1 {
 		data["tagStatus"] = tagStatus
 	}
 
-	models.EditTag(id, data)
-	data["id"] = id
+	_, err := models.EditTag(id, data)
+	if err != nil {
+		logging.Error(err)
+		appG.Response(http.StatusOK, e.ErrorTagUpdateFailed, nil)
+		return
+	}
 
+	data["id"] = id
 	appG.Response(http.StatusOK, e.Success, data)
 }
 
