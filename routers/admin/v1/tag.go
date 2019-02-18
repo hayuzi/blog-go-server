@@ -4,7 +4,6 @@ import (
 	"blog-go-server/models"
 	"blog-go-server/pkg/e"
 	"blog-go-server/pkg/util"
-	"fmt"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
