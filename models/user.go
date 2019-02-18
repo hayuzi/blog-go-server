@@ -14,3 +14,14 @@ func CheckAuth(username, password string) (*User, bool) {
 	}
 	return &user, false
 }
+
+func GetUsers(offset int, pageSize int, maps interface{}) (users []User) {
+	db.Where(maps).Order("id DESC").Offset(offset).Limit(pageSize).Find(&users)
+	return
+}
+
+func GetUserTotal(maps interface{}) (count int) {
+	db.Model(&User{}).Where(maps).Count(&count)
+	return
+}
+
