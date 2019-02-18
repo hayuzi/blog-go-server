@@ -6,7 +6,6 @@ import (
 	"blog-go-server/pkg/util"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 	"blog-go-server/pkg/app"
 	"github.com/Unknwon/com"
@@ -57,8 +56,8 @@ func GetUsers(c *gin.Context) {
 	data["pageNum"] = pageNum
 	data["pageSize"] = pageSize
 
-	for key, _ := range users {
-		users[key].Pwd = ""
+	for k, _ := range users {
+		users[k].Pwd = ""
 	}
 
 	data["lists"] = users
