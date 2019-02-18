@@ -7,7 +7,7 @@ const (
 	InvalidParams               = 400
 	ErrorUploadCheckImageFormat = 100001
 	ErrorUploadCheckImageFail   = 100002
-	ErrorUploadSaveImageFail   	= 100003
+	ErrorUploadSaveImageFail    = 100003
 
 	// 文章相关
 	ErrorTagExists        = 200001

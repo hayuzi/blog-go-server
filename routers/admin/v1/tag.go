@@ -9,6 +9,7 @@ import (
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"blog-go-server/pkg/app"
 )
 
 // @Summary 获取多个文章标签
@@ -18,6 +19,8 @@ import (
 // @Success 200 {string} json "{"code":200,"data":{"lists":[{"id": 2, "createdAt": "2019-01-01 01:16:47", "updatedAt": "2019-01-01 01:16:47", "tagName": "PHP", "weight": 5, "tagStatus": 1}], "pageNum": 1, "pageSize": 10,"total":29},"msg":"ok"}"
 // @Router /admin/v1/tags [get]
 func GetTags(c *gin.Context) {
+	appG := app.Gin{C: c}
+
 	tagName := c.Query("tagName")
 
 	maps := make(map[string]interface{})
@@ -33,8 +36,6 @@ func GetTags(c *gin.Context) {
 		maps["tag_status"] = tagStatus
 	}
 
-	code := e.Success
-
 	pageNum := util.GetPageNum(c)
 	pageSize := util.GetPageSize(c)
 	data["lists"] = models.GetTags(util.GetQueryOffset(pageNum, pageSize), pageSize, maps)
@@ -42,11 +43,7 @@ func GetTags(c *gin.Context) {
 	data["pageNum"] = pageNum
 	data["pageSize"] = pageSize
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": data,
-	})
+	appG.Response(http.StatusOK, e.Success, data)
 }
 
 // @Summary 获取所有文章标签
@@ -55,7 +52,7 @@ func GetTags(c *gin.Context) {
 // @Success 200 {string} json "{"code":200,"data":{"lists":[{"id": 2, "createdAt": "2019-01-01 01:16:47", "updatedAt": "2019-01-01 01:16:47", "tagName": "PHP", "weight": 5, "tagStatus": 1}], "pageNum": 1, "pageSize": 10,"total":29},"msg":"ok"}"
 // @Router /admin/v1/tags [get]
 func GetAllTags(c *gin.Context) {
-
+	appG := app.Gin{C: c}
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
 
@@ -65,14 +62,9 @@ func GetAllTags(c *gin.Context) {
 		maps["tag_status"] = tagStatus
 	}
 
-	code := e.Success
 	data["lists"] = models.GetAllTags(maps)
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": data,
-	})
+	appG.Response(http.StatusOK, e.Success, data)
 }
 
 // @Summary 新增文章标签
@@ -83,6 +75,8 @@ func GetAllTags(c *gin.Context) {
 // @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
 // @Router /admin/v1/tags [post]
 func AddTag(c *gin.Context) {
+	appG := app.Gin{C: c}
+
 	tagName := c.PostForm("tagName")
 	tagStatus := com.StrTo(c.DefaultPostForm("tagStatus", "1")).MustInt()
 	weight := com.StrTo(c.DefaultPostForm("weight", "0")).MustInt()
@@ -93,32 +87,24 @@ func AddTag(c *gin.Context) {
 	valid.Range(tagStatus, 1, 2, "tagStatus").Message("状态只允许1或2")
 	valid.Range(weight, 0, 100, "tagStatus").Message("权重只允许0到100之间")
 
-	// Gin 记录日志
-	// fmt.Fprintln(gin.DefaultWriter, "foo bar")
-
-	code := e.InvalidParams
-	var resData interface{}
-	resData = make(map[string]string)
-
-	if !valid.HasErrors() {
-		if !models.ExistTagByTagName(tagName) {
-			tagInfo, ok := models.AddTag(tagName, weight, tagStatus)
-			if ok {
-				code = e.Success
-				resData = *tagInfo
-			} else {
-				code = e.ErrorTagCreateFailed
-			}
-		} else {
-			code = e.ErrorTagExists
-		}
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, nil)
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": resData,
-	})
+	if models.ExistTagByTagName(tagName) {
+		appG.Response(http.StatusOK, e.ErrorTagExists, nil)
+		return
+	}
+
+	tagInfo, ok := models.AddTag(tagName, weight, tagStatus)
+	if !ok {
+		appG.Response(http.StatusOK, e.ErrorTagCreateFailed, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.Success, *tagInfo)
 }
 
 // @Summary 修改文章标签
@@ -130,6 +116,8 @@ func AddTag(c *gin.Context) {
 // @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
 // @Router /admin/v1/tags/{id} [put]
 func EditTag(c *gin.Context) {
+	appG := app.Gin{C: c}
+
 	id := com.StrTo(c.Param("id")).MustInt()
 	tagName := c.PostForm("tagName")
 
@@ -150,57 +138,50 @@ func EditTag(c *gin.Context) {
 		valid.Range(weight, 0, 100, "tagStatus").Message("权重只允许0到100之间")
 	}
 
-	fmt.Fprintln(gin.DefaultWriter, tagName)
-	fmt.Fprintln(gin.DefaultWriter, c.Param("id"))
-
-	code := e.InvalidParams
-	if !valid.HasErrors() {
-		code = e.Success
-		if models.ExistTagByID(id) {
-			data := make(map[string]interface{})
-			if tagName != "" {
-				data["tagName"] = tagName
-			}
-			if tagStatus != -1 {
-				data["tagStatus"] = tagStatus
-			}
-
-			fmt.Fprintln(gin.DefaultWriter, tagName)
-			fmt.Fprintln(gin.DefaultWriter, c.Param("id"))
-
-			models.EditTag(id, data)
-		} else {
-			code = e.ErrorTagNotExists
-		}
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, nil)
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": make(map[string]string),
-	})
+	if models.ExistTagByID(id) {
+		appG.Response(http.StatusOK, e.ErrorTagNotExists, nil)
+	}
+
+	data := make(map[string]interface{})
+	if tagName != "" {
+		data["tagName"] = tagName
+	}
+	if tagStatus != -1 {
+		data["tagStatus"] = tagStatus
+	}
+
+	models.EditTag(id, data)
+	data["id"] = id
+
+	appG.Response(http.StatusOK, e.Success, data)
 }
 
 //删除文章标签
 func DeleteTag(c *gin.Context) {
-	id := com.StrTo(c.Param("id")).MustInt()
+	appG := app.Gin{C: c}
 
+	id := com.StrTo(c.Param("id")).MustInt()
 	valid := validation.Validation{}
 	valid.Min(id, 1, "id").Message("ID必须大于0")
 
-	code := e.InvalidParams
-	if !valid.HasErrors() {
-		code = e.Success
-		if models.ExistTagByID(id) {
-			models.DeleteTag(id)
-		} else {
-			code = e.ErrorTagNotExists
-		}
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, nil)
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": make(map[string]string),
-	})
+	if models.ExistTagByID(id) {
+		appG.Response(http.StatusOK, e.ErrorTagNotExists, nil)
+		return
+	}
+
+	models.DeleteTag(id)
+
+	appG.Response(http.StatusOK, e.Success, nil)
 }
