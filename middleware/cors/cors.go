@@ -1,6 +1,7 @@
 package cors
 
 import (
+	"blog-go-server/pkg/app"
 	"blog-go-server/pkg/e"
 	"github.com/gin-gonic/gin"
 	"fmt"
@@ -37,12 +38,8 @@ func Cors() gin.HandlerFunc {
 
 		//放行所有OPTIONS方法
 		if method == "OPTIONS" {
-			c.JSON(http.StatusOK, "Options Request!")
-			c.JSON(http.StatusOK, gin.H{
-				"code": e.Success,
-				"msg":  "Options Request!",
-				"data": make(map[string]interface{}),
-			})
+			appG := app.Gin{C: c}
+			appG.Response(http.StatusOK, e.Success, nil)
 		}
 		// 处理请求
 		c.Next() //  处理请求

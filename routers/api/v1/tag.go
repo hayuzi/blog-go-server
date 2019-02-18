@@ -1,11 +1,13 @@
 package v1
 
 import (
+	"blog-go-server/pkg/app"
 	"blog-go-server/models"
 	"blog-go-server/pkg/e"
 	"blog-go-server/pkg/util"
 	"github.com/Unknwon/com"
 	"github.com/gin-gonic/gin"
+	"github.com/astaxie/beego/validation"
 	"net/http"
 	adminV1 "blog-go-server/routers/admin/v1"
 )
@@ -17,10 +19,12 @@ import (
 // @Success 200 {string} json "{"code":200,"data":{"lists":[{"id": 2, "createdAt": "2019-01-01 01:16:47", "updatedAt": "2019-01-01 01:16:47", "tagName": "PHP", "weight": 5, "tagStatus": 1}], "pageNum": 1, "pageSize": 10,"total":29},"msg":"ok"}"
 // @Router /api/v1/tags [get]
 func GetTags(c *gin.Context) {
+	appG := app.Gin{C: c}
 	tagName := c.Query("tagName")
 
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
+	valid := validation.Validation{}
 
 	if tagName != "" {
 		maps["tag_name"] = tagName
@@ -30,9 +34,14 @@ func GetTags(c *gin.Context) {
 	if arg := c.Query("tagStatus"); arg != "" {
 		tagStatus = com.StrTo(arg).MustInt()
 		maps["tag_status"] = tagStatus
+		valid.Range(tagStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
 	}
 
-	code := e.Success
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, data)
+		return
+	}
 
 	pageNum := util.GetPageNum(c)
 	pageSize := util.GetPageSize(c)
@@ -41,11 +50,7 @@ func GetTags(c *gin.Context) {
 	data["pageNum"] = pageNum
 	data["pageSize"] = pageSize
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": data,
-	})
+	appG.Response(http.StatusOK, e.Success, data)
 }
 
 // @Summary 获取所有文章标签

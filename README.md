@@ -50,7 +50,15 @@ go get -u github.com/alecthomas/template
 # 如果需要定时任务包的话，可以使用下面这个包
 go get -u github.com/robfig/cron
 
+# redis 包
+go get -u github.com/gomodule/redigo/redis
 
+
+## 可以使用 github.com/tealeg/xlsx 这个包实现Excel的操作，并直接输出到浏览器
+## 可以参考 https://blog.csdn.net/MrJavaweb/article/details/79760697
+
+## 二维码处理     可以结合图像处理的标准库来做图片的合并，加水印等等
+go get -u github.com/boombuler/barcode
 
 ```
 
@@ -65,11 +73,14 @@ blog-go-server
     |   |-- app.sample.ini 
     |
     |-- middleware              中间件
+    |   |-- cors                跨域请求处理
+    |   |-- jwt                 jwt验证
     |
     |-- models                  数据库模型
     |   |-- article.go              文章表model
     |   |-- models.go               模型基础
     |   |-- tag.go                  标签表model
+    |   |-- user.go                 用户表model
     |  
     |-- pkg                     项目中的第三方包处理
     |   |-- constmap            自定义常量
@@ -79,13 +90,24 @@ blog-go-server
     |   |   |-- code.go             错误码常量
     |   |   |-- msg.go              错误信息
     |   |
+    |   |-- file                文件处理
+    |   |   |-- file.go             文件处理
+    |   |
+    |   |-- logging             日志处理
+    |   |   |-- file.go             文件日志处理
+    |   |   |-- log.go              日志
+    |   |
     |   |-- setting             配置加载
     |   |   |-- setting.go
+    |   |
+    |   |-- upload              上传处理
+    |   |   |-- image.go            图片上传
     |   |
     |   |
     |   |-- util                工具类
     |   |   |-- jsontime.go         Gorm中需要用到的自定义时间格式  
-    |   |   |-- pagination.go       jwt验证类
+    |   |   |-- jwt.go              jwt验证类
+    |   |   |-- md5.go              md5转换
     |   |   |-- pagination.go       分页默认参数  
     |
     |
@@ -99,12 +121,17 @@ blog-go-server
     |   |
     |   |-- router.go           路由基础文件
     |
-    |-- runtime
+    |-- runtime                 运行时候的目录
+    |   |-- xxx
     |
+    |-- service                 service抽象层次
+    |   |-- xxx
     |
+    |-- vendor
+    |   |-- xxx
     |
-    |
-    |
+    |-- Dockerfile              Docker编译文件
+    |-- main.go                 项目入口
     
     
     

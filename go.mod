@@ -5,6 +5,7 @@ require (
 	github.com/Unknwon/com v0.0.0-20181010210213-41959bdd855f
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc
 	github.com/astaxie/beego v1.11.1
+	github.com/boombuler/barcode v1.0.0
 	github.com/denisenkom/go-mssqldb v0.0.0-20190121005146-b04fd42d9952 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
@@ -14,6 +15,7 @@ require (
 	github.com/go-openapi/jsonreference v0.18.0 // indirect
 	github.com/go-openapi/spec v0.18.0 // indirect
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
+	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/jinzhu/gorm v1.9.2
 	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a // indirect
 	github.com/jinzhu/now v0.0.0-20181116074157-8ec929ed50c3 // indirect
