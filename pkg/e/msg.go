@@ -14,6 +14,7 @@ var MsgFlags = map[int]string{
 	ErrorTagUpdateFailed:     "标签更新失败",
 	ErrorArticleNotExists:    "该文章不存在",
 	ErrorArticleCreateFailed: "文章新增失败",
+	ErrorArticleUpdateFailed: "文章更新失败",
 
 	ErrorAuthCheckTokenFail:    "Token鉴权失败",
 	ErrorAuthCheckTokenTimeout: "Token已超时",

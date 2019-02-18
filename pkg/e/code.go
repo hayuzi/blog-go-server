@@ -16,6 +16,7 @@ const (
 	ErrorTagUpdateFailed     = 200004
 	ErrorArticleNotExists    = 200005
 	ErrorArticleCreateFailed = 200006
+	ErrorArticleUpdateFailed = 200007
 
 	// 用户与授权相关
 	ErrorAuthCheckTokenFail    = 210001
