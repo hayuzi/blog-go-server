@@ -12,6 +12,7 @@ import (
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"net/http"
+	"blog-go-server/middleware/jwt"
 )
 
 func InitRouter() *gin.Engine {
@@ -55,7 +56,7 @@ func InitRouter() *gin.Engine {
 
 	// 管理后台接口v1
 	apiAdminV1 := r.Group("/admin/v1")
-	//apiAdminV1.Use(jwt.JWT())
+	apiAdminV1.Use(jwt.JWT())
 	{
 		//获取标签列表
 		apiAdminV1.GET("/tags", adminV1.GetTags)
