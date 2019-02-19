@@ -1,15 +1,15 @@
 package v1
 
 import (
-	"blog-go-server/pkg/app"
 	"blog-go-server/models"
+	"blog-go-server/pkg/app"
 	"blog-go-server/pkg/e"
 	"blog-go-server/pkg/util"
-	"github.com/Unknwon/com"
-	"github.com/gin-gonic/gin"
-	"github.com/astaxie/beego/validation"
-	"net/http"
 	adminV1 "blog-go-server/routers/admin/v1"
+	"github.com/Unknwon/com"
+	"github.com/astaxie/beego/validation"
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // @Summary 获取多个文章标签

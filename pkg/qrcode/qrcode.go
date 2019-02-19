@@ -4,10 +4,10 @@ import (
 	"blog-go-server/pkg/file"
 	"blog-go-server/pkg/setting"
 	"blog-go-server/pkg/util"
-	"github.com/boombuler/barcode/qr"
 	"github.com/boombuler/barcode"
-	"image/png"
+	"github.com/boombuler/barcode/qr"
 	"github.com/gin-gonic/gin"
+	"image/png"
 )
 
 type QrCode struct {
@@ -91,8 +91,7 @@ func (q *QrCode) Encode(path string) (string, string, error) {
 	return name, path, nil
 }
 
-
-func (q *QrCode) EncodeForGinResponse (c *gin.Context) (string, error) {
+func (q *QrCode) EncodeForGinResponse(c *gin.Context) (string, error) {
 	code, err := qr.Encode(q.Content, q.Level, q.Mode)
 	if err != nil {
 		return "", err
@@ -103,7 +102,7 @@ func (q *QrCode) EncodeForGinResponse (c *gin.Context) (string, error) {
 	}
 	err = png.Encode(c.Writer, code)
 	if err != nil {
-		return "",  err
+		return "", err
 	}
 	return "", nil
 }

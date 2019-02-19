@@ -3,8 +3,8 @@ package cors
 import (
 	"blog-go-server/pkg/app"
 	"blog-go-server/pkg/e"
-	"github.com/gin-gonic/gin"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
 )

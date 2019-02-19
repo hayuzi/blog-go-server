@@ -1,8 +1,8 @@
 package models
 
 import (
-	"fmt"
 	"blog-go-server/pkg/e"
+	"fmt"
 )
 
 type Tag struct {
@@ -27,7 +27,7 @@ func GetTagTotal(maps interface{}) (count int) {
 	return
 }
 
-func ExistTagByTagName(tagName string) (bool) {
+func ExistTagByTagName(tagName string) bool {
 	var tag Tag
 	db.Select("id").
 		Where("tag_name = ?", tagName).
@@ -38,7 +38,7 @@ func ExistTagByTagName(tagName string) (bool) {
 	return false
 }
 
-func ExistTagByID(id int) (bool) {
+func ExistTagByID(id int) bool {
 	var tag Tag
 	db.Select("id").
 		Where("id = ?", id).
@@ -72,7 +72,6 @@ func EditTag(id int, data interface{}) (bool, error) {
 	}
 	return true, nil
 }
-
 
 func DeleteTag(id int) bool {
 	db.Where("id = ?", id).Delete(&Tag{})
