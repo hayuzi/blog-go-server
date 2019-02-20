@@ -2,13 +2,13 @@ package v1
 
 import (
 	"blog-go-server/models"
+	"blog-go-server/pkg/app"
 	"blog-go-server/pkg/e"
 	"blog-go-server/pkg/util"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"blog-go-server/pkg/app"
 )
 
 //获取单个文章
@@ -113,7 +113,7 @@ func AddArticle(c *gin.Context) {
 
 	article, ok := models.AddArticle(data)
 	if !ok {
-		appG.Response(http.StatusOK, e.ErrorArticleAddFailed, nil)
+		appG.Response(http.StatusOK, e.ErrorArticleCreateFailed, nil)
 		return
 	}
 
@@ -181,9 +181,13 @@ func EditArticle(c *gin.Context) {
 		data["article_status"] = articleStatus
 	}
 
-	models.EditArticle(id, data)
-	data["id"] = id
+	res := models.EditArticle(id, data)
+	if !res {
+		appG.Response(http.StatusOK, e.ErrorArticleUpdateFailed, data)
+		return
+	}
 
+	data["id"] = id
 	appG.Response(http.StatusOK, e.Success, data)
 }
 

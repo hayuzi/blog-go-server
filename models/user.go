@@ -24,4 +24,3 @@ func GetUserTotal(maps interface{}) (count int) {
 	db.Model(&User{}).Where(maps).Count(&count)
 	return
 }
-

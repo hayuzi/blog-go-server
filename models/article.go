@@ -1,6 +1,8 @@
 package models
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Article struct {
 	Model
@@ -61,7 +63,10 @@ func GetArticle(id int) (article Article) {
 }
 
 func EditArticle(id int, data interface{}) bool {
-	db.Model(&Article{}).Where("id = ?", id).Updates(data)
+	res := db.Model(&Article{}).Where("id = ?", id).Updates(data)
+	if res.RowsAffected == 0 {
+		return false
+	}
 	return true
 }
 

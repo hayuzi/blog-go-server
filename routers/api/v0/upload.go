@@ -1,12 +1,12 @@
 package v0
 
 import (
-	"github.com/gin-gonic/gin"
+	"blog-go-server/pkg/app"
 	"blog-go-server/pkg/e"
 	"blog-go-server/pkg/logging"
-	"net/http"
 	"blog-go-server/pkg/upload"
-	"blog-go-server/pkg/app"
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func UploadImage(c *gin.Context) {
@@ -30,7 +30,7 @@ func UploadImage(c *gin.Context) {
 	savePath := upload.GetImagePath()
 	src := fullPath + imageName
 
-	if ! upload.CheckImageExt(imageName) || ! upload.CheckImageSize(file) {
+	if !upload.CheckImageExt(imageName) || !upload.CheckImageSize(file) {
 		appG.Response(http.StatusOK, e.ErrorUploadCheckImageFormat, data)
 		return
 	}

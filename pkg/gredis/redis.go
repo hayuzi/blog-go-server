@@ -59,7 +59,6 @@ func Set(key string, data interface{}, time int) error {
 	return nil
 }
 
-
 func Exists(key string) bool {
 	conn := RedisConn.Get()
 	defer conn.Close()

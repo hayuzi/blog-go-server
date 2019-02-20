@@ -1,11 +1,10 @@
 package v0
 
 import (
-	"github.com/gin-gonic/gin"
 	"blog-go-server/pkg/qrcode"
 	"github.com/boombuler/barcode/qr"
+	"github.com/gin-gonic/gin"
 )
-
 
 // QrCode方法渲染生成二维码并且直接以png格式输出图片到客户端
 func QrCode(c *gin.Context) {

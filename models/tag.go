@@ -1,5 +1,10 @@
 package models
 
+import (
+	"blog-go-server/pkg/e"
+	"fmt"
+)
+
 type Tag struct {
 	Model
 	TagName   string `json:"tagName"`
@@ -51,12 +56,21 @@ func AddTag(tagName string, weight int, TagStatus int) (*Tag, bool) {
 		TagStatus: TagStatus,
 	}
 	db.Create(&tag)
+	if tag.Id == 0 {
+		return &tag, false
+	}
 	return &tag, true
 }
 
-func EditTag(id int, data interface{}) bool {
-	db.Model(&Tag{}).Where("id = ?", id).Updates(data)
-	return true
+func EditTag(id int, data interface{}) (bool, error) {
+	ret := db.Model(&Tag{}).Where("id = ?", id).Updates(data)
+	if ret.Error != nil {
+		return false, ret.Error
+	}
+	if ret.RowsAffected == 0 {
+		return false, fmt.Errorf("error %d: edit tag failed", e.ErrorTagUpdateFailed)
+	}
+	return true, nil
 }
 
 func DeleteTag(id int) bool {
