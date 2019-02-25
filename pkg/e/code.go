@@ -17,10 +17,14 @@ const (
 	ErrorArticleNotExists    = 200005
 	ErrorArticleCreateFailed = 200006
 	ErrorArticleUpdateFailed = 200007
+	ErrorCommentNotExists    = 200008
+	ErrorCommentCreateFailed = 200009
+	ErrorCommentUpdateFailed = 200010
 
 	// 用户与授权相关
 	ErrorAuthCheckTokenFail    = 210001
 	ErrorAuthCheckTokenTimeout = 210002
 	ErrorAuthToken             = 210003
 	ErrorAuth                  = 210004
+	ErrorUserNotExists         = 210005
 )
