@@ -52,11 +52,25 @@ func InitRouter() *gin.Engine {
 		apiV1.GET("/articles", v1.GetArticles)
 		//获取指定文章
 		apiV1.GET("/articles/:id", v1.GetArticle)
+
+		//获取评论列表
+		apiV1.GET("/comments", v1.GetComments)
+		//获取评论
+		apiV1.GET("/comments", v1.GetComment)
+	}
+	// 业务接口v1，需要登陆
+	apiV1Auth := r.Group("/api/v1/auth/")
+	apiV1Auth.Use(jwt.JWT())
+	{
+		// 添加评论
+		apiV1Auth.POST("/comments", v1.AddComment)
+		// 修改评论
+		apiV1Auth.PUT("/comments/:id", v1.UpdateComment)
 	}
 
 	// 管理后台接口v1
 	apiAdminV1 := r.Group("/admin/v1")
-	apiAdminV1.Use(jwt.JWT())
+	apiAdminV1.Use(jwt.JWTAdmin())
 	{
 		//获取标签列表
 		apiAdminV1.GET("/tags", adminV1.GetTags)
