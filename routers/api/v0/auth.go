@@ -35,18 +35,65 @@ func GetAuth(c *gin.Context) {
 	}
 
 	userInfo, isExist := models.CheckAuth(username, pwd)
-	if isExist {
-		token, err := util.GenerateToken(userInfo.Id, username, pwd)
-		if err != nil {
-			code = e.ErrorAuthToken
-		} else {
-			data["token"] = token
-			data["id"] = userInfo.Id
-			data["username"] = username
-			code = e.Success
-		}
+	if !isExist {
+		appG.Response(http.StatusOK, e.ErrorAuth, data)
+		return
+	}
+
+	token, err := util.GenerateToken(userInfo.Id, username, pwd, userInfo.UserType)
+	if err != nil {
+		code = e.ErrorAuthToken
 	} else {
-		code = e.ErrorAuth
+		data["token"] = token
+		data["id"] = userInfo.Id
+		data["username"] = username
+		data["email"] = userInfo.Email
+		code = e.Success
+	}
+
+	appG.Response(http.StatusOK, code, data)
+}
+
+func AdminAuth(c *gin.Context) {
+	appG := app.Gin{C: c}
+
+	username := c.Query("username")
+	pwd := c.Query("pwd")
+
+	valid := validation.Validation{}
+	a := auth{Username: username, Pwd: pwd}
+	ok, _ := valid.Valid(&a)
+
+	data := make(map[string]interface{})
+	code := e.InvalidParams
+
+	if !ok {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, data)
+		return
+	}
+
+	userInfo, isExist := models.CheckAuth(username, pwd)
+
+	if !isExist {
+		appG.Response(http.StatusOK, e.ErrorAuth, data)
+		return
+	}
+
+	if userInfo.UserType != models.UserTypeAdmin {
+		appG.Response(http.StatusOK, e.ErrorAuth, data)
+		return
+	}
+
+	token, err := util.GenerateToken(userInfo.Id, username, pwd, userInfo.UserType)
+	if err != nil {
+		code = e.ErrorAuthToken
+	} else {
+		data["token"] = token
+		data["id"] = userInfo.Id
+		data["username"] = username
+		data["email"] = userInfo.Email
+		code = e.Success
 	}
 
 	appG.Response(http.StatusOK, code, data)

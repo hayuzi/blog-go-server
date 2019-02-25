@@ -12,10 +12,11 @@ type Claims struct {
 	Id       int    `json:"id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+	UserType int    `json:"userType"`
 	jwt.StandardClaims
 }
 
-func GenerateToken(userId int, username, password string) (string, error) {
+func GenerateToken(userId int, username, password string, userType int) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(7 * 24 * time.Hour)
 
@@ -23,6 +24,7 @@ func GenerateToken(userId int, username, password string) (string, error) {
 		userId,
 		username,
 		password,
+		userType,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "gin-blog",

@@ -4,7 +4,14 @@ type User struct {
 	Id       int    `gorm:"primary_key" json:"id"`
 	Username string `json:"username"`
 	Pwd      string `json:"pwd"`
+	UserType int    `json:"userType"`
+	Email    string `json:"email"`
 }
+
+const (
+	UserTypeAdmin  = 1
+	UserTypeNormal = 2
+)
 
 func CheckAuth(username, password string) (*User, bool) {
 	var user User
