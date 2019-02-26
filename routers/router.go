@@ -56,7 +56,7 @@ func InitRouter() *gin.Engine {
 		//获取评论列表
 		apiV1.GET("/comments", v1.GetComments)
 		//获取评论
-		apiV1.GET("/comments", v1.GetComment)
+		apiV1.GET("/comments/:id", v1.GetComment)
 	}
 	// 业务接口v1，需要登陆
 	apiV1Auth := r.Group("/api/v1/auth/")
