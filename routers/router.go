@@ -64,8 +64,6 @@ func InitRouter() *gin.Engine {
 	{
 		// 添加评论
 		apiV1Auth.POST("/comments", v1.AddComment)
-		// 修改评论
-		apiV1Auth.PUT("/comments/:id", v1.UpdateComment)
 	}
 
 	// 管理后台接口v1
