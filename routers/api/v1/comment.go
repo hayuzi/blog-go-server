@@ -45,7 +45,6 @@ func GetComments(c *gin.Context) {
 	maps := make(map[string]interface{})
 	valid := validation.Validation{}
 
-	q := c.Query("q")
 	var commentStatus int = -1
 	if arg := c.Query("commentStatus"); arg != "" {
 		commentStatus = com.StrTo(arg).MustInt()
