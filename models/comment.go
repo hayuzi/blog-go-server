@@ -7,14 +7,14 @@ import (
 
 type Comment struct {
 	Model
-	ArticleId     int `json:"articleId" gorm:"index"`
-	Article       Article
-	UserId        int `json:"userId" gorm:"index"`
-	User          User
-	MentionUserId int    `json:"mentionUserId" gorm:"index"`
-	MentionUser   User   `gorm:"foreignkey:MentionUserId"`
-	Content       string `json:"content"`
-	CommentStatus string `json:"commentStatus"`
+	ArticleId     int     `json:"articleId" gorm:"index"`
+	Article       Article `json:"-"`
+	UserId        int     `json:"userId" gorm:"index"`
+	User          User    `json:"user"`
+	MentionUserId int     `json:"mentionUserId" gorm:"index"`
+	MentionUser   User    `json:"mentionUser"gorm:"foreignkey:MentionUserId"`
+	Content       string  `json:"content"`
+	CommentStatus string  `json:"commentStatus"`
 }
 
 const (
