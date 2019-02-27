@@ -11,11 +11,6 @@ import (
 	"net/http"
 )
 
-type auth struct {
-	Username string `valid:"Required; MaxSize(50)"`
-	Pwd      string `valid:"Required; MaxSize(50)"`
-}
-
 func GetUsers(c *gin.Context) {
 	appG := app.Gin{C: c}
 
