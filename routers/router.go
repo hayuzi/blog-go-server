@@ -91,6 +91,12 @@ func InitRouter() *gin.Engine {
 		apiAdminV1.PUT("/articles/:id", adminV1.EditArticle)
 		//删除指定文章
 		apiAdminV1.DELETE("/articles/:id", adminV1.DeleteArticle)
+
+		//获取评论列表
+		apiAdminV1.GET("/comments", adminV1.GetComments)
+
+		//获取用户列表
+		apiAdminV1.GET("/users", adminV1.GetUsers)
 	}
 
 	return r
