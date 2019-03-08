@@ -8,7 +8,6 @@ import (
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"github.com/swaggo/swag/example/celler/model"
 )
 
 type auth struct {
@@ -101,8 +100,7 @@ func AdminAuth(c *gin.Context) {
 	appG.Response(http.StatusOK, code, data)
 }
 
-
-func Register(c *gin.Context){
+func Register(c *gin.Context) {
 	appG := app.Gin{C: c}
 
 	username := c.Query("username")
@@ -110,7 +108,7 @@ func Register(c *gin.Context){
 	pwd := c.Query("pwd")
 
 	valid := validation.Validation{}
-	a := auth{Username: username, Pwd: pwd, Email:email}
+	a := auth{Username: username, Pwd: pwd, Email: email}
 	ok, _ := valid.Valid(&a)
 
 	data := make(map[string]interface{})
