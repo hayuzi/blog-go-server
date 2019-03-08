@@ -35,7 +35,7 @@ func GetAuth(c *gin.Context) {
 		return
 	}
 
-	userInfo, isExist := models.CheckAuth(username, pwd)
+	userInfo, isExist := models.CheckAuth(username, util.EncodePwd(pwd))
 	if !isExist {
 		appG.Response(http.StatusOK, e.ErrorAuth, data)
 		return
@@ -74,7 +74,7 @@ func AdminAuth(c *gin.Context) {
 		return
 	}
 
-	userInfo, isExist := models.CheckAuth(username, pwd)
+	userInfo, isExist := models.CheckAuth(username, util.EncodePwd(pwd))
 
 	if !isExist {
 		appG.Response(http.StatusOK, e.ErrorAuth, data)
@@ -128,7 +128,7 @@ func Register(c *gin.Context) {
 
 	cData := make(map[string]interface{})
 	cData["username"] = username
-	cData["pwd"] = pwd
+	cData["pwd"] = util.EncodePwd(pwd)
 	cData["email"] = email
 	cData["user_type"] = models.UserTypeNormal
 	userInfo, ok := models.AddUser(cData)
