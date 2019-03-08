@@ -27,4 +27,6 @@ const (
 	ErrorAuthToken             = 210003
 	ErrorAuth                  = 210004
 	ErrorUserNotExists         = 210005
+	ErrorUsernameExists        = 210006
+	ErrorUserCreateFailed      = 210007
 )

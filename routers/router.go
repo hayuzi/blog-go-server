@@ -36,6 +36,7 @@ func InitRouter() *gin.Engine {
 	apiV0 := r.Group("/api/v0")
 	{
 		apiV0.GET("/auth", v0.GetAuth)
+		apiV0.GET("/register", v0.Register)
 		apiV0.GET("/qrcode", v0.QrCode)
 		apiV0.POST("/upload", v0.UploadImage)
 	}

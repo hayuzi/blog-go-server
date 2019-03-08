@@ -13,6 +13,20 @@ const (
 	UserTypeNormal = 2
 )
 
+func AddUser(data map[string]interface{}) (*User, bool) {
+	userInfo := User{
+		Username: data["username"].(string),
+		Pwd:      data["pwd"].(string),
+		UserType: data["user_type"].(int),
+		Email:    data["email"].(string),
+	}
+	db.Create(&userInfo)
+	if userInfo.Id == 0 {
+		return &userInfo, false
+	}
+	return &userInfo, true
+}
+
 func CheckAuth(username, password string) (*User, bool) {
 	var user User
 	db.Select("id").Where(User{Username: username, Pwd: password}).First(&user)
@@ -26,6 +40,17 @@ func ExistUserByID(id int) bool {
 	var user User
 	db.Select("id").
 		Where("id = ?", id).
+		First(&user)
+	if user.Id > 0 {
+		return true
+	}
+	return false
+}
+
+func ExistUserByUsername(username string) bool {
+	var user User
+	db.Select("username").
+		Where("username = ?", username).
 		First(&user)
 	if user.Id > 0 {
 		return true

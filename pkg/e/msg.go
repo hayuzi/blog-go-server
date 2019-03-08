@@ -24,6 +24,8 @@ var MsgFlags = map[int]string{
 	ErrorAuthToken:             "Token生成失败",
 	ErrorAuth:                  "Token错误",
 	ErrorUserNotExists:         "用户不存在",
+	ErrorUsernameExists:        "用户名已经被使用",
+	ErrorUserCreateFailed:      "用户注册失败",
 }
 
 func GetMsg(code int) string {
