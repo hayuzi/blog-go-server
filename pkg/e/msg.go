@@ -22,7 +22,7 @@ var MsgFlags = map[int]string{
 	ErrorAuthCheckTokenFail:    "Token鉴权失败",
 	ErrorAuthCheckTokenTimeout: "Token已超时",
 	ErrorAuthToken:             "Token生成失败",
-	ErrorAuth:                  "Token错误",
+	ErrorAuth:                  "登陆失败",
 	ErrorUserNotExists:         "用户不存在",
 	ErrorUsernameExists:        "用户名已经被使用",
 	ErrorUserCreateFailed:      "用户注册失败",
