@@ -14,7 +14,7 @@ type Comment struct {
 	MentionUserId int     `json:"mentionUserId" gorm:"index"`
 	MentionUser   User    `json:"mentionUser"gorm:"foreignkey:MentionUserId"`
 	Content       string  `json:"content"`
-	CommentStatus string  `json:"commentStatus"`
+	CommentStatus int     `json:"commentStatus"`
 }
 
 const (

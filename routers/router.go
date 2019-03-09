@@ -38,6 +38,7 @@ func InitRouter() *gin.Engine {
 		apiV0.GET("/auth", v0.GetAuth)
 		apiV0.GET("/qrcode", v0.QrCode)
 		apiV0.POST("/upload", v0.UploadImage)
+		apiV0.POST("/register", v0.Register)
 	}
 
 	// 业务接口v1
