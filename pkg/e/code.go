@@ -29,4 +29,5 @@ const (
 	ErrorUserNotExists         = 210005
 	ErrorUsernameExists        = 210006
 	ErrorUserCreateFailed      = 210007
+	ErrorUserNotAdmin      	   = 210008
 )

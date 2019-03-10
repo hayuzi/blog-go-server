@@ -29,7 +29,7 @@ func AddUser(data map[string]interface{}) (*User, bool) {
 
 func CheckAuth(username, password string) (*User, bool) {
 	var user User
-	db.Select("id").Where(User{Username: username, Pwd: password}).First(&user)
+	db.Where(User{Username: username, Pwd: password}).First(&user)
 	if user.Id > 0 {
 		return &user, true
 	}

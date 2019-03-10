@@ -35,10 +35,11 @@ func InitRouter() *gin.Engine {
 	// 通用接口
 	apiV0 := r.Group("/api/v0")
 	{
+		apiV0.POST("/register", v0.Register)
 		apiV0.GET("/auth", v0.GetAuth)
+		apiV0.GET("/adminauth", v0.AdminAuth)
 		apiV0.GET("/qrcode", v0.QrCode)
 		apiV0.POST("/upload", v0.UploadImage)
-		apiV0.POST("/register", v0.Register)
 	}
 
 	// 业务接口v1

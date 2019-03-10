@@ -8,6 +8,7 @@ import (
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"fmt"
 )
 
 type auth struct {
@@ -49,6 +50,7 @@ func GetAuth(c *gin.Context) {
 		data["id"] = userInfo.Id
 		data["username"] = username
 		data["email"] = userInfo.Email
+		data["userType"] = userInfo.UserType
 		code = e.Success
 	}
 
@@ -74,6 +76,10 @@ func AdminAuth(c *gin.Context) {
 		return
 	}
 
+	fmt.Println(username)
+	fmt.Println(pwd)
+	fmt.Println(util.EncodePwd(pwd))
+
 	userInfo, isExist := models.CheckAuth(username, util.EncodePwd(pwd))
 
 	if !isExist {
@@ -82,7 +88,7 @@ func AdminAuth(c *gin.Context) {
 	}
 
 	if userInfo.UserType != models.UserTypeAdmin {
-		appG.Response(http.StatusOK, e.ErrorAuth, data)
+		appG.Response(http.StatusOK, e.ErrorUserNotAdmin, data)
 		return
 	}
 
@@ -94,6 +100,7 @@ func AdminAuth(c *gin.Context) {
 		data["id"] = userInfo.Id
 		data["username"] = username
 		data["email"] = userInfo.Email
+		data["userType"] = userInfo.UserType
 		code = e.Success
 	}
 
@@ -103,9 +110,13 @@ func AdminAuth(c *gin.Context) {
 func Register(c *gin.Context) {
 	appG := app.Gin{C: c}
 
-	username := c.Query("username")
-	email := c.Query("email")
-	pwd := c.Query("pwd")
+	username := c.PostForm("username")
+	email := c.PostForm("email")
+	pwd := c.PostForm("pwd")
+
+	fmt.Println(username)
+	fmt.Println(email)
+	fmt.Println(pwd)
 
 	valid := validation.Validation{}
 	a := auth{Username: username, Pwd: pwd, Email: email}
@@ -145,6 +156,7 @@ func Register(c *gin.Context) {
 		data["id"] = userInfo.Id
 		data["username"] = username
 		data["email"] = userInfo.Email
+		data["userType"] = userInfo.UserType
 		code = e.Success
 	}
 
