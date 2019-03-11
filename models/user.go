@@ -3,7 +3,7 @@ package models
 import "fmt"
 
 type User struct {
-	Id       int    `gorm:"primary_key" json:"id"`
+	Model
 	Username string `json:"username"`
 	Pwd      string `json:"-"`
 	UserType int    `json:"userType"`

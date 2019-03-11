@@ -96,11 +96,13 @@ func InitRouter() *gin.Engine {
 
 		//获取评论列表
 		apiAdminV1.GET("/comments", adminV1.GetComments)
+		//删除评论
 		apiAdminV1.DELETE("/comments/:id", adminV1.DeleteComment)
 
 		//获取用户列表
 		apiAdminV1.GET("/users", adminV1.GetUsers)
-		apiAdminV1.DELETE("/users", adminV1.DeleteUser)
+		//删除用户
+		apiAdminV1.DELETE("/users/:id", adminV1.DeleteUser)
 	}
 
 	return r
