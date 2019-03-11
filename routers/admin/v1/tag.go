@@ -40,7 +40,7 @@ func GetTags(c *gin.Context) {
 
 	pageNum := util.GetPageNum(c)
 	pageSize := util.GetPageSize(c)
-	data["lists"] = models.GetTags(util.GetQueryOffset(pageNum, pageSize), pageSize, maps)
+	data["lists"] = models.GetTags(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, tagName, true)
 	data["total"] = models.GetTagTotal(maps)
 	data["pageNum"] = pageNum
 	data["pageSize"] = pageSize

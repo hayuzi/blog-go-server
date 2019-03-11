@@ -15,6 +15,11 @@ type Article struct {
 	ArticleStatus int    `json:"articleStatus" gorm:"default:1"`
 }
 
+const (
+	ArticleStatusDraft     = 1
+	ArticleStatusPublished = 2
+)
+
 func ExistArticleByID(id int) bool {
 	var article Article
 	db.Select("id").
@@ -36,20 +41,18 @@ func GetArticleTotal(maps interface{}, q string) (count int) {
 	return
 }
 
-func GetArticles(pageNum int, pageSize int, maps interface{}, q string) (articles []Article) {
+func GetArticles(pageNum int, pageSize int, maps interface{}, q string, isAdmin bool) (articles []Article) {
+	db.Preload("Tag").Where(maps)
 	if q != "" {
-		db.Preload("Tag").
-			Where(maps).
-			Where("title LIKE ?", fmt.Sprintf("%%%s%%", q)).
-			Offset(pageNum).
-			Limit(pageSize).Find(&articles)
-	} else {
-		db.Preload("Tag").
-			Where(maps).
-			Offset(pageNum).
-			Limit(pageSize).
-			Find(&articles)
+		db.Where("title LIKE ?", fmt.Sprintf("%%%s%%", q))
 	}
+
+	db.Order("weight DESC")
+	if isAdmin {
+		db.Order("id DESC")
+	}
+	db.Offset(pageNum).Limit(pageSize).Find(&articles)
+
 	return
 }
 
@@ -60,12 +63,13 @@ func GetArticle(id int) (article Article) {
 	return
 }
 
-func EditArticle(id int, data interface{}) bool {
-	res := db.Model(&Article{}).Where("id = ?", id).Updates(data)
+func EditArticle(id int, data interface{}) (*Article, bool) {
+	articleInfo := &Article{}
+	res := db.Model(articleInfo).Where("id = ?", id).Updates(data)
 	if res.RowsAffected == 0 {
-		return false
+		return articleInfo, false
 	}
-	return true
+	return articleInfo, true
 }
 
 func AddArticle(data map[string]interface{}) (*Article, bool) {

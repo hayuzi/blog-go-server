@@ -6,8 +6,6 @@ import (
 	"blog-go-server/pkg/e"
 	"blog-go-server/pkg/util"
 	adminV1 "blog-go-server/routers/admin/v1"
-	"github.com/Unknwon/com"
-	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -24,28 +22,15 @@ func GetTags(c *gin.Context) {
 
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
-	valid := validation.Validation{}
 
 	if tagName != "" {
 		maps["tag_name"] = tagName
 	}
-
-	var tagStatus int = -1
-	if arg := c.Query("tagStatus"); arg != "" {
-		tagStatus = com.StrTo(arg).MustInt()
-		maps["tag_status"] = tagStatus
-		valid.Range(tagStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
-	}
-
-	if valid.HasErrors() {
-		app.MarkErrors(valid.Errors)
-		appG.Response(http.StatusOK, e.InvalidParams, data)
-		return
-	}
+	maps["tag_status"] = models.TagStatusNormal
 
 	pageNum := util.GetPageNum(c)
 	pageSize := util.GetPageSize(c)
-	data["lists"] = models.GetTags(util.GetQueryOffset(pageNum, pageSize), pageSize, maps)
+	data["lists"] = models.GetTags(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, tagName, false)
 	data["total"] = models.GetTagTotal(maps)
 	data["pageNum"] = pageNum
 	data["pageSize"] = pageSize

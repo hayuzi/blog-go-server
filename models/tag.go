@@ -12,8 +12,21 @@ type Tag struct {
 	TagStatus int    `json:"tagStatus" gorm:"default:1"`
 }
 
-func GetTags(offset int, pageSize int, maps interface{}) (tags []Tag) {
-	db.Where(maps).Order("weight DESC").Order("id DESC").Offset(offset).Limit(pageSize).Find(&tags)
+const (
+	TagStatusNormal = 1
+	TagStatusHidden = 2
+)
+
+func GetTags(offset int, pageSize int, maps interface{}, q string, isAdmin bool) (tags []Tag) {
+	db.Where(maps)
+	if q != "" {
+		db.Where("tag_name LIKE ?", fmt.Sprintf("%%%s%%", q))
+	}
+	db.Order("weight DESC")
+	if isAdmin {
+		db.Order("id DESC")
+	}
+	db.Offset(offset).Limit(pageSize).Find(&tags)
 	return
 }
 
