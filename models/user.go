@@ -67,3 +67,8 @@ func GetUserTotal(maps interface{}) (count int) {
 	db.Model(&User{}).Where(maps).Count(&count)
 	return
 }
+
+func DeleteUser(id int) bool {
+	db.Where("id = ?", id).Delete(User{})
+	return true
+}

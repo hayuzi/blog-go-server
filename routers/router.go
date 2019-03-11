@@ -100,6 +100,7 @@ func InitRouter() *gin.Engine {
 
 		//获取用户列表
 		apiAdminV1.GET("/users", adminV1.GetUsers)
+		apiAdminV1.DELETE("/users", adminV1.DeleteUser)
 	}
 
 	return r
