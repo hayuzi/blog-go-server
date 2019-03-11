@@ -28,8 +28,12 @@ func GetTags(c *gin.Context) {
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
 
-	if tagName != "" {
-		maps["tag_name"] = tagName
+	valid := validation.Validation{}
+	var id int = -1
+	if arg := c.Query("id"); arg != "" {
+		id = com.StrTo(arg).MustInt()
+		maps["id"] = id
+		valid.Min(id, 1, "id").Message("ID必须大于0")
 	}
 
 	var tagStatus int = -1
@@ -38,6 +42,11 @@ func GetTags(c *gin.Context) {
 		maps["tag_status"] = tagStatus
 	}
 
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, nil)
+		return
+	}
 	pageNum := util.GetPageNum(c)
 	pageSize := util.GetPageSize(c)
 	data["lists"] = models.GetTags(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, tagName, true)

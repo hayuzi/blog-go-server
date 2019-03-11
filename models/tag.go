@@ -18,25 +18,43 @@ const (
 )
 
 func GetTags(offset int, pageSize int, maps interface{}, q string, isAdmin bool) (tags []Tag) {
-	db.Where(maps)
 	if q != "" {
-		db.Where("tag_name LIKE ?", fmt.Sprintf("%%%s%%", q))
+		if isAdmin {
+			db.Where(maps).Where("tag_name LIKE ?", fmt.Sprintf("%%%s%%", q)).
+				Order("id DESC").
+				Offset(offset).Limit(pageSize).
+				Find(&tags)
+		} else {
+			db.Where(maps).Where("tag_name LIKE ?", fmt.Sprintf("%%%s%%", q)).
+				Order("weight DESC").
+				Order("id DESC").
+				Offset(offset).Limit(pageSize).
+				Find(&tags)
+		}
+	} else {
+		if isAdmin {
+			db.Where(maps).
+				Order("id DESC").
+				Offset(offset).Limit(pageSize).
+				Find(&tags)
+		} else {
+			db.Where(maps).
+				Order("weight DESC").
+				Order("id DESC").
+				Offset(offset).Limit(pageSize).
+				Find(&tags)
+		}
 	}
-	db.Order("weight DESC")
-	if isAdmin {
-		db.Order("id DESC")
-	}
-	db.Offset(offset).Limit(pageSize).Find(&tags)
-	return
-}
-
-func GetAllTags(maps interface{}) (tags []Tag) {
-	db.Where(maps).Order("weight DESC").Order("id DESC").Find(&tags)
 	return
 }
 
 func GetTagTotal(maps interface{}) (count int) {
 	db.Model(&Tag{}).Where(maps).Count(&count)
+	return
+}
+
+func GetAllTags(maps interface{}) (tags []Tag) {
+	db.Where(maps).Order("weight DESC").Order("id DESC").Find(&tags)
 	return
 }
 
