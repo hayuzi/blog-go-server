@@ -43,24 +43,42 @@ func GetArticleTotal(maps interface{}, q string) (count int) {
 
 func GetArticles(pageNum int, pageSize int, maps interface{}, q string, isAdmin bool) (articles []Article) {
 	if q != "" {
-		db.Preload("Tag").
-			Where(maps).
-			Where("title LIKE ?", fmt.Sprintf("%%%s%%", q)).
-			Order("weight DESC").
-			Order("id DESC").
-			Offset(pageNum).
-			Limit(pageSize).
-			Find(&articles)
+		if isAdmin {
+			db.Preload("Tag").
+				Where(maps).
+				Where("title LIKE ?", fmt.Sprintf("%%%s%%", q)).
+				Order("id DESC").
+				Offset(pageNum).
+				Limit(pageSize).
+				Find(&articles)
+		} else {
+			db.Preload("Tag").
+				Where(maps).
+				Where("title LIKE ?", fmt.Sprintf("%%%s%%", q)).
+				Order("weight DESC").
+				Order("id DESC").
+				Offset(pageNum).
+				Limit(pageSize).
+				Find(&articles)
+		}
 	} else {
-		db.Preload("Tag").
-			Where(maps).
-			Order("weight DESC").
-			Order("id DESC").
-			Offset(pageNum).
-			Limit(pageSize).
-			Find(&articles)
+		if isAdmin {
+			db.Preload("Tag").
+				Where(maps).
+				Order("id DESC").
+				Offset(pageNum).
+				Limit(pageSize).
+				Find(&articles)
+		} else {
+			db.Preload("Tag").
+				Where(maps).
+				Order("weight DESC").
+				Order("id DESC").
+				Offset(pageNum).
+				Limit(pageSize).
+				Find(&articles)
+		}
 	}
-
 	return
 }
 

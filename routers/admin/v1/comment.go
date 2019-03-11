@@ -33,6 +33,13 @@ func GetComments(c *gin.Context) {
 		valid.Min(articleId, 1, "articleId").Message("文章ID必须大于0")
 	}
 
+	var userId int = -1
+	if arg := c.Query("userId"); arg != "" {
+		userId = com.StrTo(arg).MustInt()
+		maps["user_id"] = userId
+		valid.Min(userId, 1, "userId").Message("用户ID必须大于0")
+	}
+
 	if valid.HasErrors() {
 		app.MarkErrors(valid.Errors)
 		appG.Response(http.StatusOK, e.InvalidParams, data)
