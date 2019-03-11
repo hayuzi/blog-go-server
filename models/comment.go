@@ -78,3 +78,8 @@ func EditComment(id int, data interface{}) (bool, error) {
 	}
 	return true, nil
 }
+
+func DeleteComment(id int) bool {
+	db.Where("id = ?", id).Delete(Article{})
+	return true
+}
