@@ -34,10 +34,6 @@ func GetUsers(c *gin.Context) {
 		valid.Min(userType, 1, "userType").Message("标签ID必须大于0")
 	}
 
-	if username != "" {
-		maps["username"] = username
-	}
-
 	if valid.HasErrors() {
 		app.MarkErrors(valid.Errors)
 		appG.Response(http.StatusOK, e.InvalidParams, nil)
@@ -46,8 +42,8 @@ func GetUsers(c *gin.Context) {
 
 	pageNum := util.GetPageNum(c)
 	pageSize := util.GetPageSize(c)
-	users := models.GetUsers(util.GetQueryOffset(pageNum, pageSize), pageSize, maps)
-	data["total"] = models.GetUserTotal(maps)
+	users := models.GetUsers(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, username)
+	data["total"] = models.GetUserTotal(maps, username)
 	data["pageNum"] = pageNum
 	data["pageSize"] = pageSize
 

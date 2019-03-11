@@ -48,8 +48,15 @@ func GetTags(offset int, pageSize int, maps interface{}, q string, isAdmin bool)
 	return
 }
 
-func GetTagTotal(maps interface{}) (count int) {
-	db.Model(&Tag{}).Where(maps).Count(&count)
+func GetTagTotal(maps interface{}, q string) (count int) {
+	if q != "" {
+		db.Model(&Tag{}).
+			Where(maps).
+			Where("tag_name LIKE ?", fmt.Sprintf("%%%s%%", q)).
+			Count(&count)
+	} else {
+		db.Model(&Tag{}).Where(maps).Count(&count)
+	}
 	return
 }
 

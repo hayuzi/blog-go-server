@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type User struct {
 	Id       int    `gorm:"primary_key" json:"id"`
 	Username string `json:"username"`
@@ -58,13 +60,26 @@ func ExistUserByUsername(username string) bool {
 	return false
 }
 
-func GetUsers(offset int, pageSize int, maps interface{}) (users []User) {
-	db.Where(maps).Order("id DESC").Offset(offset).Limit(pageSize).Find(&users)
+func GetUsers(offset int, pageSize int, maps interface{}, q string) (users []User) {
+	if q != "" {
+		db.Where(maps).Order("id DESC").Offset(offset).Limit(pageSize).Find(&users)
+	} else {
+		db.Where(maps).
+			Where("username LIKE ?", fmt.Sprintf("%%%s%%", q)).
+			Order("id DESC").Offset(offset).Limit(pageSize).Find(&users)
+	}
 	return
 }
 
-func GetUserTotal(maps interface{}) (count int) {
-	db.Model(&User{}).Where(maps).Count(&count)
+func GetUserTotal(maps interface{}, q string) (count int) {
+	if q != "" {
+		db.Model(&User{}).
+			Where(maps).
+			Where("username LIKE ?", fmt.Sprintf("%%%s%%", q)).
+			Count(&count)
+	} else {
+		db.Model(&User{}).Where(maps).Count(&count)
+	}
 	return
 }
 
