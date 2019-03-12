@@ -37,7 +37,7 @@ func InitRouter() *gin.Engine {
 	{
 		apiV0.POST("/register", v0.Register)
 		apiV0.GET("/auth", v0.GetAuth)
-		apiV0.GET("/adminauth", v0.AdminAuth)
+		apiV0.GET("/admin-auth", v0.AdminAuth)
 		apiV0.GET("/qrcode", v0.QrCode)
 		apiV0.POST("/upload", v0.UploadImage)
 	}
@@ -66,6 +66,8 @@ func InitRouter() *gin.Engine {
 	{
 		// 添加评论
 		apiV1Auth.POST("/comments", v1.AddComment)
+		// 修改密码
+		apiV1Auth.POST("/change-pwd", v1.ChangePwd)
 	}
 
 	// 管理后台接口v1

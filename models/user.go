@@ -1,6 +1,8 @@
 package models
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type User struct {
 	Model
@@ -29,6 +31,15 @@ func AddUser(data map[string]interface{}) (*User, bool) {
 	return &userInfo, true
 }
 
+func EditUser(id int, data interface{}) (*User, bool) {
+	userInfo := &User{}
+	res := db.Model(userInfo).Where("id = ?", id).Updates(data)
+	if res.RowsAffected == 0 {
+		return userInfo, false
+	}
+	return userInfo, true
+}
+
 func CheckAuth(username, password string) (*User, bool) {
 	var user User
 	db.Where(User{Username: username, Pwd: password}).First(&user)
@@ -47,6 +58,12 @@ func ExistUserByID(id int) bool {
 		return true
 	}
 	return false
+}
+
+func GetUser(id int) (user User) {
+	db.Where("id = ?", id).
+		First(&user)
+	return
 }
 
 func ExistUserByUsername(username string) bool {
