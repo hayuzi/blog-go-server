@@ -44,20 +44,15 @@ func GetArticles(c *gin.Context) {
 	maps := make(map[string]interface{})
 	valid := validation.Validation{}
 
-	q := c.Query("q")
-	var articleStatus int = -1
-	if arg := c.Query("articleStatus"); arg != "" {
-		articleStatus = com.StrTo(arg).MustInt()
-		maps["article_status"] = articleStatus
-		valid.Range(articleStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
-	}
-
 	var tagId int = -1
 	if arg := c.Query("tagId"); arg != "" {
 		tagId = com.StrTo(arg).MustInt()
 		maps["tag_id"] = tagId
 		valid.Min(tagId, 1, "tagId").Message("标签ID必须大于0")
 	}
+
+	q := c.Query("q")
+	maps["article_status"] = models.ArticleStatusPublished
 
 	if valid.HasErrors() {
 		app.MarkErrors(valid.Errors)
@@ -67,7 +62,7 @@ func GetArticles(c *gin.Context) {
 
 	pageNum := util.GetPageNum(c)
 	pageSize := util.GetPageSize(c)
-	data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, q)
+	data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, q, false)
 	data["total"] = models.GetArticleTotal(maps, q)
 	data["pageNum"] = pageNum
 	data["pageSize"] = pageSize

@@ -28,8 +28,12 @@ func GetTags(c *gin.Context) {
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
 
-	if tagName != "" {
-		maps["tag_name"] = tagName
+	valid := validation.Validation{}
+	var id int = -1
+	if arg := c.Query("id"); arg != "" {
+		id = com.StrTo(arg).MustInt()
+		maps["id"] = id
+		valid.Min(id, 1, "id").Message("ID必须大于0")
 	}
 
 	var tagStatus int = -1
@@ -38,10 +42,15 @@ func GetTags(c *gin.Context) {
 		maps["tag_status"] = tagStatus
 	}
 
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, nil)
+		return
+	}
 	pageNum := util.GetPageNum(c)
 	pageSize := util.GetPageSize(c)
-	data["lists"] = models.GetTags(util.GetQueryOffset(pageNum, pageSize), pageSize, maps)
-	data["total"] = models.GetTagTotal(maps)
+	data["lists"] = models.GetTags(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, tagName, true)
+	data["total"] = models.GetTagTotal(maps, tagName)
 	data["pageNum"] = pageNum
 	data["pageSize"] = pageSize
 
@@ -136,8 +145,8 @@ func EditTag(c *gin.Context) {
 
 	var weight int = -1
 	if arg := c.PostForm("weight"); arg != "" {
-		tagStatus = com.StrTo(arg).MustInt()
-		valid.Range(weight, 0, 100, "tagStatus").Message("权重只允许0到100之间")
+		weight = com.StrTo(arg).MustInt()
+		valid.Range(weight, 0, 100, "weight").Message("权重只允许0到100之间")
 	}
 
 	if valid.HasErrors() {
@@ -152,8 +161,14 @@ func EditTag(c *gin.Context) {
 	}
 
 	data := make(map[string]interface{})
+	if tagName != "" {
+		data["tag_name"] = tagName
+	}
 	if tagStatus != -1 {
-		data["tagStatus"] = tagStatus
+		data["tag_status"] = tagStatus
+	}
+	if weight != -1 {
+		data["weight"] = weight
 	}
 
 	_, err := models.EditTag(id, data)
@@ -163,8 +178,7 @@ func EditTag(c *gin.Context) {
 		return
 	}
 
-	data["id"] = id
-	appG.Response(http.StatusOK, e.Success, data)
+	appG.Response(http.StatusOK, e.Success, nil)
 }
 
 //删除文章标签

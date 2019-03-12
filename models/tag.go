@@ -12,18 +12,56 @@ type Tag struct {
 	TagStatus int    `json:"tagStatus" gorm:"default:1"`
 }
 
-func GetTags(offset int, pageSize int, maps interface{}) (tags []Tag) {
-	db.Where(maps).Order("weight DESC").Order("id DESC").Offset(offset).Limit(pageSize).Find(&tags)
+const (
+	TagStatusNormal = 1
+	TagStatusHidden = 2
+)
+
+func GetTags(offset int, pageSize int, maps interface{}, q string, isAdmin bool) (tags []Tag) {
+	if q != "" {
+		if isAdmin {
+			db.Where(maps).Where("tag_name LIKE ?", fmt.Sprintf("%%%s%%", q)).
+				Order("id DESC").
+				Offset(offset).Limit(pageSize).
+				Find(&tags)
+		} else {
+			db.Where(maps).Where("tag_name LIKE ?", fmt.Sprintf("%%%s%%", q)).
+				Order("weight DESC").
+				Order("id DESC").
+				Offset(offset).Limit(pageSize).
+				Find(&tags)
+		}
+	} else {
+		if isAdmin {
+			db.Where(maps).
+				Order("id DESC").
+				Offset(offset).Limit(pageSize).
+				Find(&tags)
+		} else {
+			db.Where(maps).
+				Order("weight DESC").
+				Order("id DESC").
+				Offset(offset).Limit(pageSize).
+				Find(&tags)
+		}
+	}
+	return
+}
+
+func GetTagTotal(maps interface{}, q string) (count int) {
+	if q != "" {
+		db.Model(&Tag{}).
+			Where(maps).
+			Where("tag_name LIKE ?", fmt.Sprintf("%%%s%%", q)).
+			Count(&count)
+	} else {
+		db.Model(&Tag{}).Where(maps).Count(&count)
+	}
 	return
 }
 
 func GetAllTags(maps interface{}) (tags []Tag) {
 	db.Where(maps).Order("weight DESC").Order("id DESC").Find(&tags)
-	return
-}
-
-func GetTagTotal(maps interface{}) (count int) {
-	db.Model(&Tag{}).Where(maps).Count(&count)
 	return
 }
 

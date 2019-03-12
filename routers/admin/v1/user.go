@@ -34,10 +34,6 @@ func GetUsers(c *gin.Context) {
 		valid.Min(userType, 1, "userType").Message("标签ID必须大于0")
 	}
 
-	if username != "" {
-		maps["username"] = username
-	}
-
 	if valid.HasErrors() {
 		app.MarkErrors(valid.Errors)
 		appG.Response(http.StatusOK, e.InvalidParams, nil)
@@ -46,8 +42,8 @@ func GetUsers(c *gin.Context) {
 
 	pageNum := util.GetPageNum(c)
 	pageSize := util.GetPageSize(c)
-	users := models.GetUsers(util.GetQueryOffset(pageNum, pageSize), pageSize, maps)
-	data["total"] = models.GetUserTotal(maps)
+	users := models.GetUsers(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, username)
+	data["total"] = models.GetUserTotal(maps, username)
 	data["pageNum"] = pageNum
 	data["pageSize"] = pageSize
 
@@ -58,4 +54,28 @@ func GetUsers(c *gin.Context) {
 	data["lists"] = users
 
 	appG.Response(http.StatusOK, e.Success, data)
+}
+
+
+func DeleteUser(c *gin.Context){
+	appG := app.Gin{C: c}
+
+	id := com.StrTo(c.Param("id")).MustInt()
+
+	valid := validation.Validation{}
+	valid.Min(id, 1, "id").Message("ID必须大于0")
+
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.InvalidParams, nil)
+		return
+	}
+
+	if !models.ExistUserByID(id) {
+		appG.Response(http.StatusOK, e.ErrorUserNotExists, nil)
+		return
+	}
+
+	models.DeleteUser(id)
+	appG.Response(http.StatusOK, e.Success, nil)
 }

@@ -35,10 +35,11 @@ func InitRouter() *gin.Engine {
 	// 通用接口
 	apiV0 := r.Group("/api/v0")
 	{
+		apiV0.POST("/register", v0.Register)
 		apiV0.GET("/auth", v0.GetAuth)
+		apiV0.GET("/admin-auth", v0.AdminAuth)
 		apiV0.GET("/qrcode", v0.QrCode)
 		apiV0.POST("/upload", v0.UploadImage)
-		apiV0.POST("/register", v0.Register)
 	}
 
 	// 业务接口v1
@@ -60,17 +61,22 @@ func InitRouter() *gin.Engine {
 		apiV1.GET("/comments/:id", v1.GetComment)
 	}
 	// 业务接口v1，需要登陆
-	apiV1Auth := r.Group("/api/v1/auth/")
+	apiV1Auth := r.Group("/api/v1/auth")
 	apiV1Auth.Use(jwt.JWT())
 	{
 		// 添加评论
 		apiV1Auth.POST("/comments", v1.AddComment)
+		// 修改密码
+		apiV1Auth.PUT("/change-pwd", v1.ChangePwd)
 	}
 
 	// 管理后台接口v1
 	apiAdminV1 := r.Group("/admin/v1")
 	apiAdminV1.Use(jwt.JWTAdmin())
 	{
+		//获取调色盘信息
+		apiAdminV1.GET("/dashboard", adminV1.Dashboard)
+
 		//获取标签列表
 		apiAdminV1.GET("/tags", adminV1.GetTags)
 		//新建标签
@@ -95,9 +101,13 @@ func InitRouter() *gin.Engine {
 
 		//获取评论列表
 		apiAdminV1.GET("/comments", adminV1.GetComments)
+		//删除评论
+		apiAdminV1.DELETE("/comments/:id", adminV1.DeleteComment)
 
 		//获取用户列表
 		apiAdminV1.GET("/users", adminV1.GetUsers)
+		//删除用户
+		apiAdminV1.DELETE("/users/:id", adminV1.DeleteUser)
 	}
 
 	return r

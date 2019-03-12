@@ -43,18 +43,18 @@ func GetArticles(c *gin.Context) {
 	valid := validation.Validation{}
 	q := c.Query("q")
 
-	var articleStatus int = -1
-	if arg := c.Query("articleStatus"); arg != "" {
-		articleStatus = com.StrTo(arg).MustInt()
-		maps["article_status"] = articleStatus
-		valid.Range(articleStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
-	}
-
 	var tagId int = -1
 	if arg := c.Query("tagId"); arg != "" {
 		tagId = com.StrTo(arg).MustInt()
 		maps["tag_id"] = tagId
 		valid.Min(tagId, 1, "tagId").Message("标签ID必须大于0")
+	}
+
+	var articleStatus int = -1
+	if arg := c.Query("articleStatus"); arg != "" {
+		articleStatus = com.StrTo(arg).MustInt()
+		maps["article_status"] = articleStatus
+		valid.Range(articleStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
 	}
 
 	if valid.HasErrors() {
@@ -65,7 +65,7 @@ func GetArticles(c *gin.Context) {
 
 	pageNum := util.GetPageNum(c)
 	pageSize := util.GetPageSize(c)
-	data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, q)
+	data["lists"] = models.GetArticles(util.GetQueryOffset(pageNum, pageSize), pageSize, maps, q, true)
 	data["total"] = models.GetArticleTotal(maps, q)
 	data["pageNum"] = pageNum
 	data["pageSize"] = pageSize
@@ -77,12 +77,12 @@ func GetArticles(c *gin.Context) {
 func AddArticle(c *gin.Context) {
 	appG := app.Gin{C: c}
 
-	tagId := com.StrTo(c.Query("tagId")).MustInt()
-	title := c.Query("title")
-	sketch := c.Query("sketch")
-	content := c.Query("content")
-	weight := com.StrTo(c.DefaultQuery("weight", "1")).MustInt()
-	articleStatus := com.StrTo(c.DefaultQuery("articleStatus", "1")).MustInt()
+	tagId := com.StrTo(c.PostForm("tagId")).MustInt()
+	title := c.PostForm("title")
+	sketch := c.PostForm("sketch")
+	content := c.PostForm("content")
+	weight := com.StrTo(c.DefaultPostForm("weight", "1")).MustInt()
+	articleStatus := com.StrTo(c.DefaultPostForm("articleStatus", "1")).MustInt()
 
 	valid := validation.Validation{}
 	valid.Min(tagId, 1, "tagId").Message("标签ID必须大于0")
@@ -109,7 +109,7 @@ func AddArticle(c *gin.Context) {
 	data["sketch"] = sketch
 	data["content"] = content
 	data["weight"] = weight
-	data["articleStatus"] = articleStatus
+	data["article_status"] = articleStatus
 
 	article, ok := models.AddArticle(data)
 	if !ok {
@@ -125,20 +125,20 @@ func EditArticle(c *gin.Context) {
 	appG := app.Gin{C: c}
 	valid := validation.Validation{}
 
-	id := com.StrTo(c.Param("id")).MustInt()
-	tagId := com.StrTo(c.Query("tagId")).MustInt()
-	title := c.Query("title")
-	sketch := c.Query("sketch")
-	content := c.Query("content")
+	id := com.StrTo(c.PostForm("id")).MustInt()
+	tagId := com.StrTo(c.PostForm("tagId")).MustInt()
+	title := c.PostForm("title")
+	sketch := c.PostForm("sketch")
+	content := c.PostForm("content")
 
 	var weight int = -1
-	if arg := c.Query("weight"); arg != "" {
+	if arg := c.PostForm("weight"); arg != "" {
 		weight = com.StrTo(arg).MustInt()
 		valid.Range(weight, 0, 100, "weight").Message("状态只允许0或100")
 	}
 
 	var articleStatus int = -1
-	if arg := c.Query("articleStatus"); arg != "" {
+	if arg := c.PostForm("articleStatus"); arg != "" {
 		articleStatus = com.StrTo(arg).MustInt()
 		valid.Range(articleStatus, 1, 2, "articleStatus").Message("状态只允许1或2")
 	}
@@ -174,6 +174,9 @@ func EditArticle(c *gin.Context) {
 	if sketch != "" {
 		data["sketch"] = sketch
 	}
+	if weight != -1 {
+		data["weight"] = weight
+	}
 	if content != "" {
 		data["content"] = content
 	}
@@ -181,14 +184,13 @@ func EditArticle(c *gin.Context) {
 		data["article_status"] = articleStatus
 	}
 
-	res := models.EditArticle(id, data)
-	if !res {
+	articleInfo, ok := models.EditArticle(id, data)
+	if !ok {
 		appG.Response(http.StatusOK, e.ErrorArticleUpdateFailed, data)
 		return
 	}
 
-	data["id"] = id
-	appG.Response(http.StatusOK, e.Success, data)
+	appG.Response(http.StatusOK, e.Success, *articleInfo)
 }
 
 //删除文章

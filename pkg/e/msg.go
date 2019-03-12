@@ -26,6 +26,10 @@ var MsgFlags = map[int]string{
 	ErrorUserNotExists:         "用户不存在",
 	ErrorUsernameExists:        "用户名已经被使用",
 	ErrorUserCreateFailed:      "用户注册失败",
+	ErrorUserUpdateFailed:		"用户信息更新失败",
+	ErrorUserNotAdmin:          "登陆失败：您没有管理权限",
+	ErrorUserPassword:          "原密码错误",
+	ErrorPasswordDifferent:		"两次输入的密码不相同",
 }
 
 func GetMsg(code int) string {
