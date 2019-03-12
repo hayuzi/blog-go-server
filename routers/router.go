@@ -74,6 +74,9 @@ func InitRouter() *gin.Engine {
 	apiAdminV1 := r.Group("/admin/v1")
 	apiAdminV1.Use(jwt.JWTAdmin())
 	{
+		//获取调色盘信息
+		apiAdminV1.GET("/dashboard", adminV1.Dashboard)
+
 		//获取标签列表
 		apiAdminV1.GET("/tags", adminV1.GetTags)
 		//新建标签
