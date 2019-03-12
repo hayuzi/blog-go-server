@@ -28,7 +28,6 @@ func ChangePwd(c *gin.Context) {
 	valid := validation.Validation{}
 	ok, _ := valid.Valid(&pr)
 	data := make(map[string]interface{})
-	code := e.InvalidParams
 
 	if !ok {
 		app.MarkErrors(valid.Errors)
@@ -54,5 +53,5 @@ func ChangePwd(c *gin.Context) {
 		return
 	}
 
-	appG.Response(http.StatusOK, code, updatedUser)
+	appG.Response(http.StatusOK, e.Success, updatedUser)
 }

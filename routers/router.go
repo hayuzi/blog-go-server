@@ -61,13 +61,13 @@ func InitRouter() *gin.Engine {
 		apiV1.GET("/comments/:id", v1.GetComment)
 	}
 	// 业务接口v1，需要登陆
-	apiV1Auth := r.Group("/api/v1/auth/")
+	apiV1Auth := r.Group("/api/v1/auth")
 	apiV1Auth.Use(jwt.JWT())
 	{
 		// 添加评论
 		apiV1Auth.POST("/comments", v1.AddComment)
 		// 修改密码
-		apiV1Auth.POST("/change-pwd", v1.ChangePwd)
+		apiV1Auth.PUT("/change-pwd", v1.ChangePwd)
 	}
 
 	// 管理后台接口v1
