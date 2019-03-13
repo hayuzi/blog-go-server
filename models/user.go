@@ -68,7 +68,7 @@ func GetUser(id int) (user User) {
 
 func ExistUserByUsername(username string) bool {
 	var user User
-	db.Select("username").
+	db.Select("id").
 		Where("username = ?", username).
 		First(&user)
 	if user.Id > 0 {
