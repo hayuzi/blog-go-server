@@ -141,7 +141,16 @@ blog-go-server
 ---
 ### 部署
 
-##### 使用 Dockerfile 容器打包镜像
+##### 1. 设置数据库
+从[go-blog.sql]导入即可
+
+##### 2. 配置conf文件
+- 直接打包部署的话，blog-go-server 可执行文件放置在根目录，
+配置的conf文件夹与之同级，conf文件夹中放置 app.ini文件，并做好配置
+[app.ini配置格式参考](/conf/app.sample.ini)
+- 如果是docker镜像部署，请将runtime文件夹与conf文件夹挂载到容器.
+
+##### 3. 使用 Dockerfile 容器打包镜像
 ```
 # 打包linux环境下的可执行文件
 CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o blog-go-server .
@@ -162,6 +171,11 @@ docker stop mygoblog && docker rm mygoblog
 docker rmi hayuzi/blog-go-server-scratch:1.0.0
 
 
+### 直接拉我打包的镜像并部署
+docker pull hayuzi/blog-go-server-scratch:1.0.0
+docker docker run -d --name blogname -p 8001:8000 -v {your/path/to/conf}:/data/blog/conf -v {your/path/to/runtime}:/data/blog/runtime hayuzi/blog-go-server-scratch:1.0.0
+
 
 ```
+
 
