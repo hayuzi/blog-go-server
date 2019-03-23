@@ -34,6 +34,13 @@ func GetUsers(c *gin.Context) {
 		valid.Min(userType, 1, "userType").Message("标签ID必须大于0")
 	}
 
+	var userId int = -1
+	if arg := c.Query("userId"); arg != "" {
+		userStatus = com.StrTo(arg).MustInt()
+		maps["id"] = userId
+		valid.Min(userStatus,0, "userId").Message("用户ID必需为正整数")
+	}
+
 	if valid.HasErrors() {
 		app.MarkErrors(valid.Errors)
 		appG.Response(http.StatusOK, e.InvalidParams, nil)
