@@ -36,9 +36,9 @@ func GetUsers(c *gin.Context) {
 
 	var userId int = -1
 	if arg := c.Query("userId"); arg != "" {
-		userStatus = com.StrTo(arg).MustInt()
+		userId = com.StrTo(arg).MustInt()
 		maps["id"] = userId
-		valid.Min(userStatus,0, "userId").Message("用户ID必需为正整数")
+		valid.Min(userId,0, "userId").Message("用户ID必需为正整数")
 	}
 
 	if valid.HasErrors() {
