@@ -79,11 +79,11 @@ func ExistUserByUsername(username string) bool {
 
 func GetUsers(offset int, pageSize int, maps interface{}, q string) (users []User) {
 	if q != "" {
-		db.Where(maps).Order("id DESC").Offset(offset).Limit(pageSize).Find(&users)
-	} else {
 		db.Where(maps).
 			Where("username LIKE ?", fmt.Sprintf("%%%s%%", q)).
 			Order("id DESC").Offset(offset).Limit(pageSize).Find(&users)
+	} else {
+		db.Where(maps).Order("id DESC").Offset(offset).Limit(pageSize).Find(&users)
 	}
 	return
 }
