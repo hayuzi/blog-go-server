@@ -143,6 +143,7 @@ blog-go-server
 
 ##### 1. 设置数据库
 从[go-blog.sql](/sql/go-blog.sql)导入即可
+目前数据库连接设置的时区是东八区. 
 
 ##### 2. 配置conf文件
 - 直接打包部署的话，blog-go-server 可执行文件放置在根目录，
