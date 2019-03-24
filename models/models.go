@@ -22,7 +22,8 @@ type Model struct {
 func Setup() {
 	var err error
 	db, err = gorm.Open(setting.DatabaseSetting.Type,
-		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Local",
+		// %s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Local， 服务器本地时区未设置，这里使用上海
+		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Asia%%2FShanghai",
 			setting.DatabaseSetting.User,
 			setting.DatabaseSetting.Password,
 			setting.DatabaseSetting.Host,
