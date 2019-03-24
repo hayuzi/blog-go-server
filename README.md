@@ -142,7 +142,7 @@ blog-go-server
 ### 部署
 
 ##### 1. 设置数据库
-从[go-blog.sql]导入即可
+从[go-blog.sql](/sql/go-blog.sql)导入即可
 
 ##### 2. 配置conf文件
 - 直接打包部署的话，blog-go-server 可执行文件放置在根目录，
