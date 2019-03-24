@@ -159,10 +159,11 @@ CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o blog-go-server .
 # 构建docker镜像 
 ## hayuzi/blog-go-server-scratch:1.0.0 表示的是 <仓库/名称:版本tag> 
 ## hayuzi是本人仓库, 个人构建的时候只需要 <[仓库名/]名称[:版本tag]>
-
+## 目前基于scratch构建镜像不能使用东八区的时区, 这个问题未处理
+## 如果想要修改，请在mysql连接中修改为东八区，并使用其他支持东八区时区设置的初始镜像构建。
 docker build -t hayuzi/blog-go-server-scratch:1.0.0 .
 
-# 运行docker镜像  ( 需要将项目实际配置所在目录挂载进去, 并将日志所在文件夹暴露出来 ) 日志目录挂载好像暂时有问题 
+# 运行docker镜像  ( 需要将项目实际配置所在目录挂载进去, 并将日志所在文件夹暴露出来 )
 docker run --name=mygoblog -p 8000:8000 -v $GOPATH/src/blog-go-server/conf:/data/blog/conf -v /$GOPATH/src/blog-go-server/runtime:/data/blog/runtime  hayuzi/blog-go-server-scratch:1.0.0
 
 # 停止并删除容器
