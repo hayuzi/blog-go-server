@@ -169,12 +169,12 @@ docker run --name=mygoblog -p 8000:8000 -v $GOPATH/src/blog-go-server/conf:/data
 docker stop mygoblog && docker rm mygoblog
 
 # 删除镜像
-docker rmi hayuzi/blog-go-server-scratch:1.0.0
+docker rmi hayuzi/blog-go-server-scratch:release
 
 
 ### 直接拉我打包的镜像并部署
-docker pull hayuzi/blog-go-server-scratch:1.0.0
-docker docker run -d --name blogname -p 8001:8000 -v {your/path/to/conf}:/data/blog/conf -v {your/path/to/runtime}:/data/blog/runtime hayuzi/blog-go-server-scratch:1.0.0
+docker pull hayuzi/blog-go-server-scratch:release
+docker docker run -d --name blogname -p 8001:8000 -v {your/path/to/conf}:/data/blog/conf -v {your/path/to/runtime}:/data/blog/runtime hayuzi/blog-go-server-scratch:release
 
 
 ```
