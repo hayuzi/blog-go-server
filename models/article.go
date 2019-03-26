@@ -102,6 +102,7 @@ func AddArticle(data map[string]interface{}) (*Article, bool) {
 	articleInfo := Article{
 		TagId:         data["tag_id"].(int),
 		Title:         data["title"].(string),
+		Sketch:        data["sketch"].(string),
 		Content:       data["content"].(string),
 		ArticleStatus: data["article_status"].(int),
 	}
