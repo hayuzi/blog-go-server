@@ -1,4 +1,6 @@
-module github.com/hayuzi/blog-go-server
+module blog-go-server
+
+go 1.15
 
 require (
 	cloud.google.com/go v0.35.1 // indirect
